@@ -1,0 +1,159 @@
+\addtolength{\textwidth}{2cm}
+\addtolength{\oddsidemargin}{-1,3cm}
+\addtolength{\topmargin}{-2.5cm}
+\addtolength{\textheight}{6cm}
+\addtolength{\footskip}{1cm}
+\typearea{13}
+
+\marginparwidth=1.0in
+\setlength{\parindent}{0pt}
+\pagestyle{empty}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Packages %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[ngerman]{babel}
+\usepackage{hyperref}
+\usepackage{ae,aecompl}         % für gute PDF-Fonts
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{caption}
+\usepackage[linesnumbered, noline, ruled]{algorithm2e}
+\usepackage{tabularx}
+\usepackage{xspace}
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{forest}
+\usetikzlibrary{graphs, quotes}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{mathtools}
+\usepackage{xlop}
+\usepackage{marvosym}
+\usepackage{fdsymbol}
+\usepackage{colortbl}
+\usepackage{microtype}
+\usepackage{adjustbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Own Commands %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\DeclareMathOperator{\N}{\mathbb N}
+\DeclareMathOperator{\Q}{\mathbb Q}
+\DeclareMathOperator{\R}{\mathbb R}
+\DeclareMathOperator{\Z}{\mathbb Z}
+\DeclareMathOperator{\BigO}{\mathcal{O}}
+\DeclareMathOperator{\ggT}{\text{ggT}}
+\DeclareMathOperator{\opt}{\text{\tiny opt}}
+\newcommand{\copt}[1]{C^{\opt}_{#1}}
+
+\makeatletter
+\newcommand{\ostar}{\mathbin{\mathpalette\make@circled\star}}
+\newcommand{\make@circled}[2]{%
+	\ooalign{$\m@th#1\smallbigcirc{#1}$\cr\hidewidth$\m@th#1#2$\hidewidth\cr}%
+}
+\newcommand{\smallbigcirc}[1]{%
+	\vcenter{\hbox{\scalebox{0.77778}{$\m@th#1\bigcirc$}}}%
+}
+\makeatother
+
+% different theorem styles
+\newcommand{\Bemerkung}[1]{\par\noindent \textbf{Bemerkung:} #1 \xspace}
+\newtheorem{theorem}{Satz}
+\newtheorem*{theorem*}{Satz}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem*{definition*}{Definition}
+\theoremstyle{remark}
+\newtheorem{claim}[theorem]{Behauptung}
+
+\SetKwComment{Comment}{$\triangleright$\ }{}
+\DontPrintSemicolon
+\SetArgSty{relax}
+
+% Farbschema fuer Listings
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\hypersetup{linkbordercolor=backcolour}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\ttfamily\footnotesize,
+	breakatwhitespace=true,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=none,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}
+}
+
+\lstdefinelanguage{Julia}%
+{morekeywords = {abstract, break, case, catch, const, continue, do, else, elseif,
+		end, export, false, for, function, immutable, import, importall, include, if, in,
+		macro, module, mutable, otherwise, quote, return, struct, switch, true, try, type, typealias,
+		using, while},
+	emph={Int, Float64, Float16, Float32, Matrix, String, Vector},
+	emphstyle={\color{cyan}},
+	sensitive=true,
+	alsoother={$},
+	morecomment=[l]\#,
+	morecomment=[n]{\#=}{=\#},
+	morestring=[s]{"}{"},
+	morestring=[m]{'}{'},
+}[keywords,comments,strings]
+
+\lstset{style=mystyle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcounter{auf}\setcounter{auf}{0}
+\newenvironment{aufgabe}
+{
+	\addvspace{\medskipamount}
+	\refstepcounter{auf}
+	\noindent
+	\textbf{\arabic{auf}. Aufgabe}
+	\nopagebreak{\medskip \par}
+}
+
+\newcommand{\haloesung}[1]{
+	\begin{center}
+		{\large \bfseries Lösungen zum #1.\ Übungsblatt Computerorientierte Mathematik II}
+		\vskip1ex
+	\end{center}
+}
+
+\renewcommand{\arraystretch}{1.3}
+% Unser Kopf
+\newcommand{\university}{Technische Universität Berlin}
+\newcommand{\semester}{SoSe 2025}
+\newcommand{\faculty}{Fakultät II, Institut für Mathematik}
+
+\newcommand{\student}[2]{#1 & #2\\}  
+\newcommand{\group}[1]{\underline{Gruppe #1}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\includegraphics[width=1cm]{tublogo.png}}
+\fancyfoot[C]{-- \thepage\ of \pageref{LastPage} --}
+\fancypagestyle{startseite}{
+	\fancyhead[L]{\includegraphics[width=1cm]{tublogo.png}}
+	\fancyhead[R]{{\bfseries\university\\ \faculty}}
+	\fancyfoot[C]{-- \thepage\ of \pageref{LastPage} --}
+}
+\setlength{\headheight}{33pt}
+\thispagestyle{startseite}

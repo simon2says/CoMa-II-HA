@@ -1,0 +1,235 @@
+\documentclass{scrartcl} % file is in UTF-8 Encoding
+
+\usepackage[T1]{fontenc}
+
+\input{template}
+%---------------- VARS --------------%
+\newcommand{\headvorlage}{	
+	\group{24} \hfill \textbf{\semester} \\
+	\begin{tabular}{@{}l r}
+		\student{Philine Stella Bock}{507316}
+		\student{Devagya Sharma}{495395}
+		\student{Simon Seemüller}{513084}
+	\end{tabular}
+	\haloesung{02}
+}
+
+\begin{document}
+	\setcounter{auf}{0}
+	\headvorlage
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item Unsere Implementierung der Catalan-Zahlen verwendet eine Liste, in der diese gespeichert und dann immer wieder abgerufen werden, allerdings nur ein Mal berechnet.
+            \lstinputlisting[language = Julia, firstline = 3, lastline = 12]{jl/A01.jl}
+            \begin{theorem*}
+                Diese Implementierung zur Berechnung der Catalan-Zahlen hat Laufzeit in $\Theta(n^2)$.
+            \end{theorem*}
+            \begin{proof}
+                Die Funktion erstellt zunaechst in $\BigO(n)$ eine Liste von Nullen. Dann setzt sie den ersten Eintrag auf $1$. Danach geht sie durch zwei ineinandergeschachtelte Schleifen, die jeweils hoechstens $n$ Iterationen haben. Jeder Schleifenaufruf innerhalb der inneren Schleife geschieht in konstanter Zeit. Am Ende greift die Funktion noch einmal in konstanter Zeit auf die Liste zu. Dadurch wird eine Gesamtlaufzeit fuer die Funktion von $\Theta(n^2)$ erwartet.
+            \end{proof}
+            \item Der Algorithmus generiert zunächst eine leere Matrix in der erforderlichen Größe. Er setzt den Eintrag in $(1, 1) = 1$. Danach arbeitet er für jeden weiteren Eintrag von oben nach unten, setzt den Eintrag auf die Summe des Eintrages links davon und darüber. Für den Fall, dass der Eintrag darüber nicht existiert, nutzen wir die darüber im multiple dispatch definierte Variante der Addition, die ein {\ttfamily nothing} und eine Zahl addiert. Währenddessen, ab Zeile 3, beginnt er, alle Einträge zwei Zeilen über der aktuellen wieder aus der Matrix zu löschen, um Speicherplatz zu sparen. Damit nutzen wir auch im letzten Schleifendurchlauf nur $n + n - 1 < 2n$ gespeicherte Werte.
+            \lstinputlisting[language = Julia, firstline = 16, lastline = 43]{jl/A01.jl}
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item ~\begin{center}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, fill=teal!60, inner sep = 5pt, level distance=4cm},
+                    [12 [6 [9 [1] [16]] [5 [2] [15]]] [13 [14, right[7]] [8]]]
+                    \end{forest}
+                \end{center}
+            \item Nach {\ttfamily MaxHeapify(A)} sieht der Baum aus wie folgt:
+            \begin{center}
+                \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, fill=teal!60, inner sep = 5pt, level distance=4cm},
+                    [16 [15 [9 [1] [6]] [12 [2] [5]]] [14 [13, right[7]] [8]]]
+                \end{forest}
+            \end{center}
+            \item Die beiden Algorithmen erzeugen nicht immer den gleichen Heap. Der neue Algorithmus erstellt einen MaxHeap, jedoch wird in der neuen Liste immer für jeden Knoten ein {\ttfamily Insert}-Aufruf durchgeführt. Innerhalb dieses Insert-Aufrufes wird der entsprechende Knoten so lange mit seinen Elternknoten getauscht, bis er an der korrekten Stelle steht.
+
+            Während der regulären {\ttfamily Build-Max-Heap}-Funktion wird ein Elternknoten in diesem Falle immer mit dem \emph{größeren} seiner Kinder getauscht. In der {\ttfamily Alternative-Build-Max-Heap}-Funktion wird ein Elternknoten dagegen immer mit dem \emph{ersten} seiner Kinder getauscht, das größer ist. Falls ein Elternknoten hier also zwei Kinder hat, die beide größer sind, tauscht er jeden Falls mit dem linken der beiden.
+            \item Der {Alternative-Build-Max-Heap}-Algorithmus ruft fuer jedes Element in dem Baum ein Mal die Insert-Funktion auf. Laut Vorlesung (\href{https://isis.tu-berlin.de/pluginfile.php/3539290/mod_resource/content/1/Kapitel14.pdf}{Folie $14 \mid 18$}) hat diese eine Laufzeit in $\Theta(\log n)$. Da wir die Funktion $n$ Mal aufrufen, ergibt sich eine Laufzeit fuer die {\ttfamily Alternative-Build-Max-Heap}-Funktion in $\Theta(n \log n)$.
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item Ein CoMa-Baum der Ordnung $3$ könnte so aussehen:
+                \begin{center}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, fill=teal!60, inner sep = 5pt},
+                    [3 [2 [1 [0]] [0]] [1, calign with current [0]] [0]]
+                    \end{forest}
+                \end{center}
+            \item Wir zeigen zunächst, dass gilt:
+            \[
+                \sum_{k = 0}^{n - 1}2^k + 1 = 2^n.
+            \]
+            \begin{proof}[Beweis mittels vollständiger Induktion]
+                Induktionsanfang $(n = 0)$:
+                \begin{align*}
+                    \sum_{k = 0}^{-1}2^k + 1 &= 2^0\\
+                    1 &= 1
+                \end{align*}
+                Gilt.
+                
+                Induktionsvoraussetzung: Für ein beliebiges, aber festes $n \in \N$ gelte:
+                \[
+                    \sum_{k = 0}^{n - 1}2^k + 1 = 2^n.
+                \]
+                Induktionsschritt $(n \to n + 1)$: Dann gilt auch:
+                \begin{align*}
+                    \sum_{k = 0}^{n}2^k + 1 &= 2^{n + 1}.
+                    \intertext{Wir formen um:}
+                    \sum_{k = 0}^{n}2^k + 1 &= \sum_{k = 0}^{n - 1}2^k + 1 + 2^n\\
+                    &\stackrel{IV}{=} 2^n + 2^n\\
+                    &= 2\cdot2^n\\
+                    &= 2^{n + 1}
+                \end{align*}
+                Gilt, also ist die Induktion abgeschlossen.
+            \end{proof}
+            Nun zeigen wir, dass ein CoMa-Baum $k$-ter Ordnung immer $2^k$ Knoten hat.
+            \begin{proof}[Beweis mittels starker Induktion]
+                Induktionsanfang $(k = 0, k = 1)$:
+                Ein Baum $0$-ter Ordnung hat immer genau $1 = 2^0$ Knoten. Hier gilt also die Annahme. Ein Baum erster Ordnung hat immer eine Wurzel und einen darunterliegenden Baum, bestehend aus dem Knoten $0$, also $2 = 2^1$ Knoten. Hier gilt die Annahme somit auch.
+                
+                Induktionsvoraussetzung:
+
+                Für alle $j \in \N: 0 \leq j < k$ gelte: Alle CoMa-Bäume $j$-ter Ordnung haben $2^j$ Knoten.
+
+                Induktionsschritt: $(j \to k)$:
+
+                Dann hat ein CoMa-Baum $k$-ter Ordnung $2^k$ Knoten: Ein CoMa-Baum $k$-ter Ordnung besteht aus einem Wurzelknoten plus allen Bäumen mit Ordnung $j: 0 \leq j < k$. Also hat laut Induktionsvoraussetzung ein Baum $k$-ter Ordnung exakt
+                \[
+                    \sum_{j = 0}^{k - 1}2^j + 1
+                \]
+                Knoten. Aus dem vorherigen Beweis wissen wir, dass gilt:
+                \[
+                    \sum_{j = 0}^{k - 1}2^j + 1 = 2^k.
+                \]
+                Also hat ein CoMa-Baum $k$-ter Ordnung $2^k$ Knoten.
+            \end{proof}
+            \item Die Anzahl der Elemente in dem Heap ist die Summe der Anzahl der Knoten in allen CoMa-Bäumen in dem Heap. Die Anzahl der Knoten in einem CoMa-Baum $k$-ter Ordnung beträgt $2^k$. Damit ergibt sich für die Summe der Elemente
+            \[
+                \sum_{i = 0}^k c_i, c_i \in \{1, 2, 4, 8, \ldots\}.
+            \]
+            Wir suchen nun nach Aufgabenstellung also eine Bijektion von dieser Funktion zu $\N$. Diese finden wir in der Binärdarstellung natürlicher Zahlen:
+            \[
+                \sum_{k = 0}^{n} a_k\cdot 2^k, a_k = \begin{dcases*}
+                    1 \text{, falls Baum $k$-ter Ordnung enthalten ist} \\
+                    0 \text{, sonst}
+                \end{dcases*}
+            \]
+            Diese Summe ist äquivalent zu der oberen. Alle Elemente nicht enthaltener Bäume bleiben weg, indem $a_k = 0$ ist. Da es sich hierbei um die Binärdarstellung natürlicher Zahlen handelt, ist diese Funktion offensichtlich bijektiv.
+            \item 
+            \begin{theorem*}
+                Ein CoMa-Heap, der $n$ Elemente enthält, kann im schlechtesten Fall $\lceil\log_2(n)\rceil$ CoMa-Bäume enthalten. 
+            \end{theorem*}
+            \begin{proof}[Beweis durch Widerspruch.]
+                Angenommen, es gäbe eine Anordnung von mehr als $\lceil\log_2(n)\rceil$ Bäumen, die $n$ Elemente enthalten. Wir wählen diese Bäume so klein wie möglich. Dann ergibt sich für die Summe der Knoten in den Bäumen
+                \begin{align*}
+                    \sum_{k = 0}^{\lceil\log_2(n) \rceil + 1 - 1}2^k &= \sum_{k = 0}^{\lceil\log_2(n) \rceil}2^k\\
+                    &\geq \sum_{k = 0}^{\log_2(n)}2^k\\
+                    &> 2^{\log_2(n)} = n
+                \end{align*}
+                Es kann also keine Anordnung von mehr als $\lceil \log_2(n)\rceil$ unterschiedlichen CoMa-Bäumen geben, die zusammen $n$ Elemente enthalten.
+            \end{proof}
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item \label{item:4a}\begin{theorem*}
+                \[
+                    \sum_{i = 1}^{n}\hat{t_i}\geq \sum_{i = 1}^n t_i.
+                \]
+            \end{theorem*}
+            \begin{proof}
+                \begin{alignat*}{2}
+                &&\sum_{i = 1}^{n}\hat{t_i}&\geq \sum_{i = 1}^n t_i.
+                \intertext{Wir nutzen hierfür die Definition von $\hat{t_i}$:}
+                \Longleftrightarrow&&\hspace{4ex}\sum_{i = 1}^n \big(t_i + \Phi(D_i) + \Phi(D_{i - 1})\big)&\geq \sum_{i = 1}^n t_i\\
+                \Longleftrightarrow&&\sum_{i = 1}^n t_i + \sum_{i = 1}^n \big(\Phi(D_i) + \Phi(D_{i - 1}) \big)&\geq \sum_{i = 1}^n t_i\\
+                \Longleftrightarrow&&\sum_{i = 1}^n \big(\Phi(D_i) + \Phi(D_{i - 1}) \big)&\geq 0
+                \intertext{Da $\Phi(D_i)$ nur positive Zahlen oder $0$ zurückgeben kann -- $n_i$ ist die Anzahl der Elemente nach Ausführung der $i$-ten Operation, also positiv, und $k$ ist positiv, zumindest, da $t_i$ obere Schranke für die Laufzeit sein muss und $t_i = k\cdot \ln \max\{n_{i - 1}, i\}$ -- muss das gelten.}
+                \end{alignat*}
+            \end{proof}
+            \item \label{item:4b}Es soll gelten:
+            \[
+            n\ln\Big(\frac{n}{n - 1}\Big) \leq 2, n \geq 2
+            \]
+            \begin{alignat*}{2}
+                \intertext{Laut Voraussetzung gilt:}
+                &&2 &\leq n\\
+                \intertext{Wir nutzen einige Umformungsschritte:}
+                \Longleftrightarrow&& 0 &\leq n - 2\\
+                \Longleftrightarrow&& n^2 &\leq n^2 + n - 2\\
+                \Longleftrightarrow&& n^2 &\leq (n + 2)(n - 1)\\
+                \intertext{Da sowohl $n$ als auch $n - 1$ positiv sein müssen, können wir folgende Umformungen machen:}
+                \Longleftrightarrow&& \frac{n^2}{n - 1} &\leq n + 2\\
+                \Longleftrightarrow&& \frac{n}{n - 1} &\leq \frac{n + 2}{n}\\
+                \Longleftrightarrow&& \frac{n}{n - 1} &\leq 1 + \frac{2}{n}
+                \intertext{Dann muss laut Hinweis auch gelten:}
+                &&\frac{n}{n - 1} &\leq e^{\frac{2}{n}}\\
+                \Longleftrightarrow&&\hspace*{5ex}\ln\Big(\frac{n}{n - 1}\Big) &\leq \frac{2}{n}\\
+                \Longleftrightarrow&&n\ln\Big(\frac{n}{n - 1}\Big) &\leq 2
+            \end{alignat*}
+            Gilt.
+            \item \label{item:4c}Wir zeigen, dass für ein festes, aber beliebiges $i \in \{1, ..., n \}$ die Laufzeit $\hat{t_i} \in \BigO(log \ n_i)$, wenn die $i$-te Operation ein {\ttfamily Insert} ist. Es gilt $t_i = k \cdot \ln \max\{n_{i-1},1\}$ als obere Schranke für die Laufzeit der $i$-ten ausgeführten Operation für eine geeignete Zahl $k$. Dann ist mit \ref{item:4a} und der Potentialfunktion für $n_{i-1} \neq 0$ $$\hat{t_i}=k \cdot \ln \max\{n_{i-1},1\} + kn_i\ln(n_i)-kn_{i-1}\ln(n_{i-1}).$$ 
+            Sei $n_i = n_{i-1}+1$, da es sich um Operation {\ttfamily Insert} handelt, dann schätzen wir ab durch 
+            \begin{align*} 
+            \hat{t_i} &= k \cdot \ln \max\{n_{i-1},1\} + kn_i\ln(n_i)-kn_{i-1}\ln(n_{i-1})\\ 
+            &= k \cdot \ln \max\{n_{i-1},1\} + k(n_{i-1}+1)\ln(n_{i-1}+1)-kn_{i-1}\ln(n_{i-1})\\ 
+            &= k \cdot \ln (n_{i-1}) + k(n_{i-1}+1)\ln(n_{i-1}+1)-kn_{i-1}\ln(n_{i-1})\\ 
+            &= k \cdot \ln (n_{i-1}) (1 - n_{i-1}) + k(n_{i-1}+1)\ln(n_{i-1}+1)\\
+            &= kn_{i-1} (-\ln(n_{i-1}) + \ln(n_{i-1}+1)) + k (\ln (n_{i-1}) + \ln(n_{i-1}+1))\\
+            \intertext{Dann gilt mit \ref{item:4b}, den Logarithmusgesetzen und $n_{i-1}=n_i -1$, dass:}
+            &= kn_{i-1} \ln\Big(\frac{n_{i-1}+1}{n_{i-1}}\Big) + k \big(\ln \big(n_{i-1} \cdot (n_{i-1}+1)\big)\big)\\
+            &= kn_{i-1} \ln\Big(\frac{n_i}{n_i -1}\Big) + k \big(\ln \big(n_{i-1} \cdot (n_{i-1}+1)\big)\big)\\
+            &\leq kn_{i-1} \frac{2}{n_i} + k \big(\ln \big(n_{i-1} \cdot (n_{i-1}+1)\big)\big)\\
+            &< kn_{i} \frac{2}{n_i} + k \big(\ln (n_i \cdot n_i)\big)\\
+            &= 2k + 2k \ln (n_i)\\
+            \end{align*}
+            Da $2k + 2k \cdot \ln(n_1)$ für ein geeignetes $k$ in $\BigO(\log n)$ ist, gilt $\hat{t_i} \in \BigO(\log n)$.
+            %Das folgende war eine unnötge Abschätzung, die deutlich komplizierter als die nun vorhandene Lösung ist und damit im Vergleich uneffizient.
+            %\begin{align*}    
+            %&< k \cdot ln \ max\{n_{i-1},1\} + k(n_{i-1}+1)ln(n_{i-1}+1)-k(n_{i-1}+1)ln(n_{i-1})\\
+            %&= k \cdot ln \ max\{n_{i-1},1\} + k(n_{i-1}+1) \cdot (ln(n_{i-1}+1)-ln(n_{i-1})).
+            %\end{align*}
+            %&= k \cdot (ln(n_{i-1})+ (n_{i-1}+1) \cdot (ln(n_{i-1}+1)-ln(n_{i-1}))) \\
+            %&= k \cdot (ln(n_{i-1}) (1 - n_{i-1}-1) + (n_{i-1}+1) \cdot (ln(n_{i-1}+1))) \\
+            %&= k \cdot (ln(n_{i-1}) (n_{i-1}) + (n_{i-1}+1) \cdot (ln(n_{i-1}+1))) \\
+            %&= k \cdot (ln(n_{i-1}) (n_{i-1}) + (n_{i-1}) \cdot (ln(n_{i-1}+1) + (ln(n_{i-1}+1))) \\
+            %&= k \cdot ((n_{i-1})(ln(n_{i-1})+(ln(n_{i-1}+1)) + (ln(n_{i-1}+1))) \\
+            %&< k \cdot ((n_{i-1})(ln(n_{i-1}+1)+(ln(n_{i-1}+1)) + (ln(n_{i-1}+1))) \\
+            %&= k \cdot ((n_{i-1})(2 \cdot ln(n_{i-1}+1)) + ln(n_{i-1}+1)) \\
+            %&= k \cdot (ln(n_{i-1}+1) \cdot (2n_{i-1} +1)) \\            
+            %&< k \cdot (ln(n_{i-1}+1) \cdot (2n_{i-1} +2)) \\
+            %&= k \cdot (ln(n_{i-1}+1) \cdot (2(n_{i-1} +1))) \\
+            %&= k \cdot (ln(n_i) \cdot (2n_i))
+            %\end{align*}
+            %Da $k, 2n_i > 0$ gilt näherungsweise für $c=k2n_i$ mit $c>0$:
+            %$$ \hat{t_i} = k \cdot (ln(n_i) \cdot (2n_i)) = k2n_iln(n_i) = c \ln(n_i).$$
+            %Damit ist $\hat{t_i} \in O(log \ n_i)$.
+            Für $n_{i-1}=0$ ist der Fall trivialer und es gilt $\hat{t_i}=k \cdot \ln \max\{n_{i-1},1\} + kn_i\ln(n_i)$. Dann ergibt sich, da $n_1=1$, sofort $$\hat{t_i}=k \cdot \ln (1) + k\ln(1) = 0 = \log(1)= \log(n_i).$$ Daher gilt für $\hat{t_i} \in \BigO(\log n_i)$.
+            \item \label{item:4d}Wir zeigen, dass für ein festes, aber beliebiges $i \in \{2, ..., n \}$ die Laufzeit $\hat{t_i} \in \BigO(1)$, wenn die i-te Operation ein {\ttfamily ExtractMax} ist. Es gilt $t_i = k \cdot \ln \max\{n_{i-1},1\}$ als obere Schranke für die Laufzeit der i-ten ausgeführten Operation für eine geeignete Zahl k. Dann ist mit \ref{item:4a} und der Potentialfunktion für $n_{i} \neq 0$ $$\hat{t_i}=k \cdot \ln \max\{n_{i-1},1\} + kn_i\ln(n_i)-kn_{i-1}\ln(n_{i-1}).$$ 
+            Sei $n_{i-1} = n_{i}+1$, da es sich bei der Operation um ein {\ttfamily ExtractMax} handelt, dann schätzen wir ab durch 
+            \begin{align*} 
+            \hat{t_i}&=k \cdot \ln \max\{n_{i-1},1\} + kn_i\ln(n_i)-kn_{i-1}\ln(n_{i-1})\\ 
+            &=k \cdot \ln \max\{n_{i}+1,1\} + kn_i\ln(n_i)-k(n_{i}+1)\ln(n_{i}+1)\\
+            &=k \cdot \ln (n_{i}+1)+ kn_i\ln(n_i)-k(n_{i}+1)\ln(n_{i}+1)\\
+            &=k \cdot \ln (n_{i}+1) (1 - n_{i} -1)+ kn_i\ln(n_i)\\
+            &=k \cdot \ln (n_{i}+1) (-n_{i})+ kn_i\ln(n_i)\\
+            &=-kn_i \cdot \ln (n_{i}+1) + kn_i\ln(n_i)\\
+            &=kn_i \cdot (-\ln (n_{i}+1) + \ln(n_i))\\
+            &=kn_i \cdot \ln\Big(\frac{n_i}{n_{i}+1}\Big)\\
+            \end{align*}
+            Mit \ref{item:4b} gilt dann, dass
+            \begin{align*}
+                &\hat{t_i}=kn_i \cdot \ln\Big(\frac{n_i}{n_{i}+1}\Big) \leq kn_i\frac{2}{n_i} = 2k
+            \end{align*}
+            Da $2k$ für ein geeignetes $k$ in $\BigO(1)$ ist, gilt $\hat{t_i} \in \BigO(1)$.
+            Für $n_{i-1}=1$ ist der Fall trivialer und es gilt $\hat{t_i}=k \cdot \ln \max\{n_{i-1},1\} + kn_i\ln(n_i)-kn_{i-1}\ln(n_{i-1})$. Dann ergibt sich, da $n_i=0$, sofort $$\hat{t_i}=k ln (1) -k\ln(1)= 0.$$ Daher gilt für $\hat{t_i} \in \BigO(1)$, da null in $\BigO(1)$ ist.
+            \item \label{item:4e}Mit \ref{item:4c} gilt, dass die Laufzeit eines {\ttfamily Insert}, bei einem festen, aber beliebigen $i \in \{1, ..., n\}$ $\hat{t_i} \in \BigO(\log n_i)$ ist. Wenn wir nun von einem anfänglichen leeren Heap ausgehen und die Anzahl der ausgeführten {\ttfamily Insert}s $s$ beträgt, dann ergibt sich für die Laufzeit, dass jeder {\ttfamily Insert} die Laufzeit $\BigO(\log n)$ hat und bei s {\ttfamily Insert}s es s-Mal die Laufzeit braucht, um den Algorithmus auszuführen. Somit folgt aus \ref{item:4c} $\BigO(s \log n)$. Betrachten wir nun die zusätzlich ausgeführten {\ttfamily ExtractMax}es, wobei ein {\ttfamily ExtractMax} mit \ref{item:4d} für ein festes, aber beliebiges $i \in \{2, ..., n\}$ Laufzeit $\BigO(1)$ hat. Wenn es nun aber {\ttfamily ExtractMax}es der Anzahl l gibt, dann haben diese {\ttfamily ExtractMax}es für feste, aber beliebige $i$ jeweils eine Laufzeit von $\BigO(1)$ und so insgesamt einer Laufzeit entsprechend der Anzahl $l$, also $\BigO(l \cdot 1)$, also $\BigO(l)$. Addiert man die Laufzeiten miteinander, so erhält man die Gesamtlaufzeit zur Durchführung des Algorithmus mit einem anfänglichen leeren Heap. So ergibt sich $\BigO(s \log n + l)$.
+        \end{enumerate}
+    \end{aufgabe}
+\end{document}

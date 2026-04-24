@@ -1,0 +1,14 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+
+\begin{document}
+    \begin{alignat*}{2}
+        &&\hspace*{5ex}\sum_{i = 0}^{k}b^i &= \frac{b^{k + 1} - 1}{b - 1}\\
+        \Longleftrightarrow&& \hspace*{15ex}\sum_{i = 0}^{k - 1}b^i + b^k &= \frac{b^{k + 1} - 1}{b - 1}\\
+        \stackrel{\text{IV}}{\Longleftrightarrow}&& \frac{b^k - 1}{b - 1} + b^k &= \frac{b^{k + 1} - 1}{b - 1}\\
+        \Longleftrightarrow&& \frac{b^k - 1}{b - 1} + \frac{b^k (b - 1)}{b - 1} &= \frac{b^{k + 1} - 1}{b - 1}\\
+        \Longleftrightarrow&& \frac{b^k - 1 + b^{k+1} - b^k}{b - 1} &= \frac{b^{k + 1} - 1}{b - 1}\\
+        \Longleftrightarrow&& \frac{b^{k+1} - 1}{b - 1} &= \frac{b^{k+1} - 1}{b - 1}
+    \end{alignat*}
+\end{document}

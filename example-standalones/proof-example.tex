@@ -1,0 +1,20 @@
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\newtheorem{theorem}{Satz}
+\newtheorem*{theorem*}{Satz}
+\newtheorem{definition}{Definition}
+\newtheorem*{definition*}{Definition}
+\theoremstyle{remark}
+\newtheorem{claim}[theorem]{Behauptung}
+
+\begin{document}
+    \begin{theorem*}
+        Der Algorithmus funktioniert korrekt.
+    \end{theorem*}
+    \begin{proof}
+        Ein Element, das das Maximum der Liste ist, wird auf jeden Fall in Maxlist gespeichert werden, da es kein Element gibt, mit dem es verglichen werden könnte, durch das es nicht in Maxlist gespeichert wird. Innerhalb von Maxlist wird in Iteration $m$ offensichtlich immer das größte Element der ersten $m$ Elemente als Maximum gewählt. Damit wird nach Iteration über die ganze Liste das Maximum der ganzen Liste ausgewählt. Äquivalent funktioniert der Beweis für das Minimum.
+    \end{proof}
+\end{document}

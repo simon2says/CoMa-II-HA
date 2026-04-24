@@ -1,0 +1,312 @@
+\documentclass{scrartcl} % file is in UTF-8 Encoding
+
+\usepackage[T1]{fontenc}
+
+\input{template}
+%---------------- VARS --------------%
+\newcommand{\headvorlage}{	
+	\group{24} \hfill \textbf{\semester} \\
+	\begin{tabular}{@{}l r}
+		\student{Philine Stella Bock}{507316}
+		\student{Devagya Sharma}{495395}
+		\student{Simon Seemüller}{513084}
+	\end{tabular}
+	\haloesung{07}
+}
+% äüöß
+\begin{document}
+    \setcounter{auf}{0}
+	\headvorlage
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item Es ist 
+            \[
+                n(h) = \frac{\Phi^{h + 3}}{\sqrt{5}} - 1.
+            \]
+            Das Ergebnis wird hierbei in der Realität auf die nächste ganze Zahl gerundet.
+    
+            \begin{proof}[Beweis durch starke Induktion]
+                Induktionsanfang $(h = 0, h = 1)$: Für $h = 0$ ist die Anzahl der Knoten in einem Fibonacci-Baum gleich 1 = $\frac{\Phi^{3}}{\sqrt{5}} - 1$. Für $h = 1$ ist die Anzahl der Knoten gleich $2 = \frac{\Phi^4}{\sqrt{5}} - 1$.
+
+                Induktionsvoraussetzung: Für alle $h, 0 \leq h < h + 1$ gilt:
+                \[
+                    n(h) = \frac{\Phi^{h + 3}}{\sqrt{5}} - 1.
+                \]
+                Induktionsschritt: Dann gilt auch:
+                \[
+                    n(h + 1) = \frac{\Phi^{h + 4}}{\sqrt{5}} - 1.
+                \]
+                Laut Rekursionsformel ist
+                \begin{align*}
+                    n(h + 1) &= 1 + n(h) + n(h - 1)\\
+                    &\stackrel{\mathclap{\text{\tiny (IV)}}}{=} 1 + \frac{\Phi^{h + 3}}{\sqrt{5}} - 1 + \frac{\Phi^{h + 2}}{\sqrt{5}} - 1\\
+                    &= \frac{\Phi^{h + 3}}{\sqrt{5}} + \frac{\Phi^{h + 2}}{\sqrt{5}} - 1\\
+                    &= \frac{\Phi^{h + 3} + \Phi^{h + 2}}{\sqrt{5}} - 1\\
+                    &= \frac{\Phi^{h + 3}\cdot (1 + \frac{1}{\Phi})}{\sqrt{5}} - 1\\
+                    &= \frac{\Phi^{h + 3}\cdot \Phi}{\sqrt{5}} - 1\\
+                    &= \frac{\Phi^{h + 4}}{\sqrt{5}} - 1
+                \end{align*}
+            \end{proof}
+            
+            \item 
+            Wir zeigen zunächst zwei Sätze:
+            \begin{theorem*}
+                Ein Fibonacci-Baum der Höhe $h$ enthält $n(h) = F_{h + 3} - 1$ Knoten.
+            \end{theorem*}
+            \begin{proof}[Beweis durch starke Induktion.]
+                Induktionsanfang $(h = 0, h = 1)$: Ein Fibonacci-Baum der Höhe $0$ enthält $n(0) = 1 = F_3 - 1$ Knoten. Ein Fibonacci-Baum der Höhe $1$ enthält $n(1) = 2 = F_4 - 1$ Knoten.
+
+                Induktionsvoraussetzung: Für alle $h, 0 \leq h < j$ gilt: Ein Fibonacci-Baum der Höhe $h$ enthält $F_{h + 3} - 1$ Knoten.
+
+                Induktionsschritt: Dann enthält auch ein Fibonacci-Baum der Höhe $j$ genau $n(j) = F_{j + 3} - 1$ Knoten. Laut rekursiver Definition enthält er $n(j) = n(j - 1) + n(j - 2) + 1$ Knoten.
+                \begin{align*}
+                    n(j) &= n(j - 1) + n(j - 2) + 1\\
+                    &\stackrel{\mathclap{\text{\tiny (IV)}}}{=} F_{j + 2} - 1 + F_{j + 1} - 1 + 1\\
+                    &= F_{j + 3} - 1
+                \end{align*}
+                Gilt.
+            \end{proof}
+            
+            \begin{theorem*}
+                \[
+                    s(h + 1) = s(h) + s(h - 1) + F_{h + 4} - 2.
+                \]
+            \end{theorem*}
+            \begin{proof}
+                Die Anzahl der Knoten in einem Fibonacci-Baum der Hoehe $h$ beträgt $F_{h + 3} - 1$. Wenn wir zwei Fibonacci-Bäume $T_h, T_{h - 1}$ der Hoehen $h$ und $h - 1$ zu einem neuen Fibonacci-Baum der Höhe $h + 1$ zusammenfügen, so entsteht ein neuer Baum, in dem die Knoten von $T_h$ und $T_{h - 1}$ ihre Tiefe um $1$ erhöht haben. Dadurch ist
+                \begin{align*}
+                    s(h + 1) &= s(h) + s(h - 1) + \sum_{\mathclap{v \in T_h}}1 + \sum_{\mathclap{v \in T_{h - 1}}}1\\
+                    \intertext{Laut vorherigem Satz:}
+                    &= s(h) + s(h - 1) + F_{h + 3} - 1 + F_{h + 2} - 1\\
+                    &= s(h) + s(h - 1) + F_{h + 4} - 2.
+                \end{align*}
+            \end{proof}
+            Nun können wir zeigen:
+            \[
+                s(h) = \frac{2}{5}(h - 1) F_{h + 5} - \frac{h}{5}F_{h + 4} + 2
+            \]
+            \begin{proof}[Beweis durch starke Induktion.]
+                Induktionsanfang $(h = 0, h = 1)$:
+                \begin{align*}
+                    s(0) &= 0\\
+                    &= \frac{2}{5}\cdot (-1) \cdot F_5 - \frac{0}{5}F_4 + 2\\
+                    &= \frac{10}{5} + 2 = 0\\
+                    s(1) &= 1\\
+                    &= \frac{2}{5}\cdot 0 \cdot F_6 - \frac{1}{5}F_5 + 2\\
+                    &= -\frac{1}{5}\cdot 5 + 2 = 1
+                \end{align*}
+                Gilt.
+
+                Induktionsvoraussetzung: Für alle $h, 0 \leq h < h + 1$ gilt:
+                \[
+                    s(h) = \frac{2}{5}(h - 1) F_{h + 5} - \frac{h}{5}F_{h + 4} + 2
+                \]
+                Induktionsschritt $(h \to h + 1)$:
+                Dann gilt auch:
+                \[
+                    s(h + 1) = \frac{2}{5}h\cdot F_{h + 6} - \frac{h + 1}{5}F_{h + 5} + 2
+                \]
+                \begin{align*}
+                    s(h + 1) &= s(h) + s(h - 1) + F_{h + 4} - 2\\
+                    &\stackrel{\mathclap{\text{\tiny (IV)}}}{=} \frac{2}{5}(h - 1) F_{h + 5} - \frac{h}{5}F_{h + 4} + 2 + \frac{2}{5}(h - 2) F_{h + 4} - \frac{h - 1}{5}F_{h + 3} + 2 + F_{h + 4} - 2\\
+                    &= \frac{2}{5}(h - 1) F_{h + 5} - \frac{h}{5}F_{h + 4} + \frac{2}{5}(h - 2) F_{h + 4} - \frac{h - 1}{5}F_{h + 3} + F_{h + 4} + 2\\
+                    \intertext{Wir gruppieren die Terme für mehr Übersicht:}
+                    &= \frac{2}{5}(h - 1) F_{h + 5} + \frac{2}{5}(h - 2)F_{h + 4} - \frac{h}{5}F_{h + 4} - \frac{h - 1}{5}F_{h + 3} + F_{h + 4} + 2\\
+                    &= \frac{2}{5}(h - 1) F_{h + 5} + \frac{2}{5}(h - 1)F_{h + 4} - \frac{2}{5}F_{h + 4} - \frac{h}{5}F_{h + 4} - \frac{h - 1}{5}F_{h + 3} + F_{h + 4} + 2\\
+                    &= \frac{2}{5}(h - 1)(F_{h + 5} + F_{h + 4}) - \frac{2}{5}F_{h + 4} - \frac{h}{5}F_{h + 4} - \frac{h - 1}{5}F_{h + 3} + F_{h + 4} + 2\\
+                    &= \frac{2}{5}(h - 1)F_{h + 6} - \frac{2}{5}F_{h + 4} - \frac{h}{5}F_{h + 4} - \frac{h - 1}{5}F_{h + 3} + F_{h + 4} + 2\\
+                    \intertext{Wir fassen die $F_{h + 4}$ zusammen und stellen ein wenig um für mehr Übersicht.}
+                    &= \frac{2}{5}(h - 1)F_{h + 6} + \frac{3 - h}{5}F_{h + 4} + \frac{1 - h}{5}F_{h + 3} + 2\\
+                    &= \frac{2}{5}(h - 1)F_{h + 6} + \frac{1 - h}{5}F_{h + 4} + \frac{-1 - h}{5}F_{h + 3} + \frac{2}{5}(F_{h + 4} + F_{h + 3}) + 2\\
+                    &= \frac{2}{5}(h - 1)F_{h + 6} + \frac{1 - h}{5}F_{h + 4} + \frac{-1 - h}{5}F_{h + 3} + \frac{2}{5}(F_{h + 5}) + 2\\
+                    &= \frac{2}{5}(h - 1)F_{h + 6} + \frac{-1 - h}{5}F_{h + 4} + \frac{-1 - h}{5}F_{h + 3} + \frac{2}{5}(F_{h + 5} + F_{h + 4}) + 2\\
+                    &= \frac{2}{5}(h - 1)F_{h + 6} + \frac{-1 - h}{5}F_{h + 4} + \frac{-1 - h}{5}F_{h + 3} + \frac{2}{5}F_{h + 6} + 2\\
+                    &= \frac{2}{5}h\cdot F_{h + 6} + \frac{-1 - h}{5}F_{h + 4} + \frac{-1 - h}{5}F_{h + 3} + 2\\
+                    &= \frac{2}{5}h\cdot F_{h + 6} + \frac{-1 - h}{5}F_{h + 5} + 2\\
+                    &= \frac{2}{5}h\cdot F_{h + 6} - \frac{h + 1}{5}F_{h + 5} + 2
+                \end{align*}
+            \end{proof}
+            
+            \item Wir zeigen, dass $c \geq \frac{2}{5}\Phi^2 - \frac{1}{5}\Phi$ ist.
+            \begin{proof}
+                \begin{align*}
+                    \lim_{h \to\infty}c \cdot h &\geq \lim_{h\to\infty}\frac{\frac{2}{5}(h - 1)F_{h + 5} - \frac{h}{5}F_{h + 4} + 2}{F_{h + 3} - 1}
+                    \intertext{Da $h \to \infty$ gehen soll, können wir die konstanten Terme vernachlässigen:}
+                    &\geq \lim_{h\to\infty}\frac{\frac{2}{5}(h - 1)F_{h + 5} - \frac{h}{5}F_{h + 4}}{F_{h + 3}}
+                    \intertext{Es ist bekannterweise $\lim_{i\to\infty}\frac{F_{i + 1}}{F_i} = \Phi$.}
+                    &\geq \lim_{h\to\infty}\frac{2}{5}(h - 1)\Phi^2 - \frac{h}{5}\Phi\\
+                    &= \lim_{h\to\infty}\frac{2}{5}h\Phi^2 - \frac{1}{5}h\Phi - \frac{2}{5}\Phi^2\\
+                    &= \lim_{h\to\infty}h\cdot\Big(\frac{2}{5}\Phi^2 - \frac{1}{5}\Phi\Big) - \frac{2}{5}\Phi^2\\
+                    \intertext{Den letzten Term können wir vernachlässigen:}
+                    \lim_{h\to\infty}h\cdot c &\geq \lim_{h\to\infty}h\cdot\Big(\frac{2}{5}\Phi^2 - \frac{1}{5}\Phi\Big)\\
+                    c &\geq \frac{2}{5}\Phi^2 - \frac{1}{5}\Phi
+                \end{align*}
+            \end{proof}
+        \end{enumerate}
+    \end{aufgabe}
+        
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item Unser Algorithmus folgt:
+        \end{enumerate}
+            \begin{algorithm}[H]
+                \caption{\ttfamily AVL-Treeify(x)}
+                \uIf{$\beta$(x) = $-2$}{
+                    y $\gets$ x.{\ttfamily left}\\
+                    \uIf{$\beta$(y) = 1}{
+                        z $\gets$ y.{\ttfamily right}\\
+                        {\ttfamily Rotate-LR}(x)\Comment*[r]{In diesem Falle Doppelrotation.}
+                        \uIf{$\beta$(z) = $-1$}{
+                            $\beta$(x) $\gets$ 1\\
+                            $\beta$(y) $\gets$ 0
+                        }
+                        \uElseIf{$\beta$(z) = 1}{
+                            $\beta$(x) $\gets$ 0\\
+                            $\beta$(y) $\gets$ $-1$
+                        }
+                        \Else{
+                            $\beta$(x) $\gets$ 0\\
+                            $\beta$(y) $\gets$ 0
+                        }
+                        $\beta$(z) $\gets$ 0
+                    }
+                    \Else{
+                        {\ttfamily RotateRight}(x)\\
+                        \uIf{$\beta$(y) = 0}{
+                            $\beta$(x) $\gets$ $-1$\\
+                            $\beta$(y) $\gets$ 1\\
+                        }
+                        \Else{
+                            $\beta$(x) $\gets$ 0\\
+                            $\beta$(y) $\gets$ 0\\
+                        }
+                    }
+                }
+                \ElseIf{$\beta$(x) = 2}{
+                    \ldots
+                }
+            \end{algorithm}
+        \begin{enumerate}[label=(\alph*)]
+            \setcounter{enumi}{1}
+            \item Wir nutzen hier die in der Vorlesung vorgestellte Funktion {\ttfamily Tree-Insert}.
+        \end{enumerate}
+        \begin{algorithm}[H]
+            \caption{\ttfamily AVL-Insert(x)}
+            {\ttfamily Tree-Insert(x)}\\
+            curr $\gets$ x
+            \While{curr $\neq$ None}{
+                \If{$\lvert\beta$(curr)$\rvert$ = 2}{
+                    {\ttfamily AVL-Treeify}(curr)\\
+                    \If{curr.{\ttfamily p} $\neq$ None {\bfseries and} $\beta$(x) = $\beta$(y) {\bfseries or} $\beta$(x) $\neq -\beta(y)$}{
+                        \Comment{Die Höhe des aktuellen Teilbaumes hat sich dann verändert, wenn entweder $\beta$(x) = $\beta$(y) = 0 oder der Fall innerhalb der einfachen Links- oder Rechtsrotation eintritt, bei dem nicht $\beta$(x) = $-\beta$(y) ist. Dann updaten wir die Höhen darüber, abhängig davon, ob der Baum auf der linken oder rechten Seite seines Elternknotens war.}
+                        \If{curr = curr.{\ttfamily p.left}}{
+                            $\beta$(curr.{\ttfamily p}) $\gets$ $\beta$(curr.{\ttfamily p}) + 1
+                        }
+                        \Else{
+                            $\beta$(curr.{\ttfamily p}) $\gets$ $\beta$(curr.{\ttfamily p}) - 1
+                        }
+                    }
+                    curr $\gets$ curr.{\ttfamily p}
+                }
+            }
+        \end{algorithm}
+        \begin{enumerate}[label=]
+            \item \begin{theorem*}
+                Der Algorithmus ist korrekt.
+            \end{theorem*}
+            \begin{proof}
+                Der erste Teil des Algorithmus nutzt die Informationen aus der Vorlesung. Laut Vorlesungsfolien ab \href{https://isis.tu-berlin.de/pluginfile.php/3557366/mod_resource/content/2/Kapitel18.pdf#Outline0.18.6.154}{($18\mid 35$)} gelten folgende Bedingungen:
+                \begin{enumerate}[label=(\roman*)]
+                    \item Falls $\beta$(x) = $-2$ und $\beta$(y) = 1, so gilt: Die Höhe des Baumes verringert sich um 1 und die Balancen der Knoten $x$ und $y$ verändern sich wie auf den Folien angegeben.
+                    \item Falls $\beta$(x) = $-2$ und $\beta$(y) $\in \{0, -1\}$, so gilt: Die Balancen verändern sich wie auf den Folien angegeben. Die Höhe des Baumes verringert sich unter einer Bedingung um 1, auf die wir gleich näher eingehen werden.
+                \end{enumerate}
+                Diese Bedingungen hat die Funktion {\ttfamily AVL-Treeify} implementiert.
+
+                Zunächst wird der Knoten $x$ eingefügt und auf den ersten Elternknoten $y$ von $x$, der eine Balance von $\lvert \beta(y)\rvert = 2$ hat, {\ttfamily AVL-Treeify} aufgerufen.  Der Algorithmus geht noch weiter aufwärts und passt genau dann die Balancen der Elternknoten an, wenn sich die Höhe des Baumes nach {\ttfamily AVL-Treeify} um 1 verringert hat. 
+                
+                Die Höhe des Baumes verringert sich dann um 1, wenn es eine Rechtsrotation gab und $\beta$(y) = 1 war oder, wenn es eine Doppelrotation gab. Wenn $\beta$(y) = 1 war, so sind die neuen Balancen $\beta'$(x) = $\beta'$(y) = 0. Wenn es eine Doppelrotation gab, so sind laut Folien die neuen Balancen entweder auch $\beta'$(x) = $\beta'$(y) = 0 oder $\beta'$(x) = 0, $\beta'$(y) = $-1$ oder $\beta'$(x) = 1, $\beta'$(y) = 0 (und entsprechend für die anderen RL- oder L-Rotationen). 
+
+                Diese Fälle sind in der {\ttfamily if}-Abfrage in Zeile $5$ abgedeckt.
+
+                Auch die Anpassung der Balancen der Eltern funktioniert korrekt: Der Algorithmus startet von $x$ aus und sieht dort immer, ob es das linke oder rechte oder rechte Kind ist seines Elternknoten ist. Falls es das linke Kind ist, so hat sich der linke Teilbaum um $1$ verringert, die Balance wird also um 1 größer. Falls es das rechte Kind ist, so hat sich der rechte Teilbaum um $1$ verringert, die Balance wird also um $1$ kleiner.
+            \end{proof}
+            \begin{theorem*}
+                Die Laufzeit des Algorithmus liegt in $\BigO(\log(n))$.
+            \end{theorem*}
+            \begin{proof}
+                Der Algorithmus nutzt in {\ttfamily AVL-Treeify} nur Zuweisungen und Vergleiche in $\BigO(1)$. Alle Anpassungen der Balancen in {\ttfamily AVL-Treeify} finden in konstanter Zeit statt, und es gibt jeden Falls konstant viele.
+
+                Der Algorithmus wendet {\ttfamily AVL-Treeify} höchstens $\BigO(\log(n))$ Mal an. Er geht dafür durch den Baum, der aufgrund der AVL-Eigenschaft eine Höhe in $\BigO(\log(n))$ hat, und sieht nach, welche Knoten eine Balance von $\lvert 2\rvert$ haben. In jeder Iteration kann sich die Höhe des Baumes bestenfalls verringern. Falls sich die Höhe des Baumes nicht verringert, werden die Balancen nicht weiter angepasst und es wird kein weiterer Aufruf von {\ttfamily AVL-Treeify} durchgeführt. Falls sich die Höhe des Baumes verringert, so kann das höchstens in $\BigO(\log(n))$ Mal passieren. Damit ist die Gesamtlaufzeit des Algorithmus $\BigO(\log(n))$.
+            \end{proof}
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item Wir zeigen, dass es ein Potential $\Phi '$ gibt, sodass $O_1, O_2$ zusammmen eine amortisierte Laufzeit in $\mathcal{O}(f(|T|))$ haben. Nach Definition (Folie 18|60) gilt für eine Operation, die den Baum $T$ in $T'$ umwandelt, die amortisierte Laufzeit 
+            \begin{align*}
+                &a:= t + \Phi (T') - \Phi (T) 
+                \intertext{Da die Laufzeiten der beiden Operationen $O_1, O_2$ auf $T$ proportinal zu $d_T$ sind, ergibt sich:}
+                &t_1 = cd_T \quad \text{ und } \quad t_2 =dd_T.
+                \intertext{Somit gilt für die jeweilige Laufzeit der einzelnen Operationen:}
+                &a_{O_1} = cd_T + \Phi (T') - \Phi (T) \quad \text{ und } \quad a_{O_2} = dd_T + \Phi (T') - \Phi (T).
+                \intertext{Für $O_1, O_2$ zusammen ergibt sich dann für die Laufzeit mit einem geeigneten Potential $\Phi'$:}
+                &a= cd_T + \Phi' (T') - \Phi' (T) + dd_T + \Phi' (T') - \Phi' (T) = \frac{c+d}{d} (dd_T + + \Phi' (T') - \Phi' (T)).
+                \intertext{Da $\frac{c+d}{d}$ konstant ist und $(dd_T + + \Phi' (T') - \Phi' (T))$ nach Vorraussetzung als Laufzeit von $O_2$ in $\mathcal{O}(f(|T|))$ liegt, gilt, dass auch}
+                &a = \frac{c+d}{d} (dd_T + + \Phi' (T') - \Phi' (T)) \in \mathcal{O}(f(|T|))
+                \intertext{ist.}
+            \end{align*}
+            Wir schlussfolgern nun, dass die Funktion Splay-Search für ein geeignetes Potential eine Laufzeit in $\mathcal{O}(\log n)$ hat. \\ Gemäß des gegebenen Pseudocodes ergibt sich, dass die Suche des jeweiligen Knotens den Baum nicht verändert, womit nach der Vorlesung (Folie 18|60) und Teilaufgabe eins, sich somit eine konstante Laufzeit für $O_1$ von $\mathcal{O}(cd_T)$ in Abhängigkeit der Tiefe des Knotens ergibt. Weiter wird der entsprechende Knoten dann an die Wurzel des Baus angehängt, dabei verändert sich der Baum durch die Splay Operation dann. Es ergibt sich nach Lemma (Folie 18|61), dass die amortisierte Laufzeit für die Operation Splay am Knoten $x$ in Baum $T$ beschränkt ist und in $\mathcal{O}(\log n)$ bezüglich eines geeigneten Potentials, das nach Definition bei einem gegebenen Binärbaum $T$ mit $s(x)$ als Anzahl der Knoten im Teilbaum und $r(x)$ als Rang gegeben ist mit 
+            \begin{align*}
+                \Phi(T)= \sum_{x \in T} r(x) = \sum_{x \in T} \log s(x). 
+            \end{align*} Da der Baum verändert wird, gilt dann mit Teil eins, dass $O_2 \in \mathcal{O}(\log n)$ ist. Nach dem ersten Teil folgt dann sofort für $O_1 + O_2$ als kombinierte amortisierte Laufzeit, dass die gesamte Funktion Splay-Search für ein geeignetes Potential eine Laufzeit in $\mathcal{O}(\log n)$ hat.
+            \item Um den nicht in $T$ enthaltenden Schlüssel erstmalig zu finden beziehungsweise zu suchen, ergibt sich im schlechtesten Fall, wie auch bei der Suche nach einem vorhandenen Schlüssel $k$ als Laufzeit $\mathcal{O}(n)$. Der letzte besuchte Knoten wird dann an die Wurzel des Baums angefügt, also gesplayed. Dies passiert unabhängig davon, dass der Schlüssel k nicht im Baum gefunden worden wäre. Wenn danach beliebig viele weitere Suchen nach dem Schlüssel, also $k$ ausgeführt werden, also $m$ viele ergibt sich für jede dieser Suchen eine konstante Laufzeit, womit all diese konstanten Laufzeiten zusammen in $\mathcal{O}(m)$ sind. Dies ist der Fall, da der Algorithmus relativ schnell und in konstanter Zeit die Stelle findet, wo der Schlüssel $k$ sein müsste. Allerdings ist $k$ da nicht und der Algortíthmus splayed dann wieder den letzten besuchten Knoten an die Wurzel. Es entsteht praktisch ein Kreislauf, indem die Anzahl der Iterationen immer gleich sind, gegebenenfalls sogar $\mathcal{O}(1)$. Durch diesen Algorithmus und die konstante Anzahl der Iterationen, die konstante Laufzeit haben, ergibt sich eben jene konstante Laufzeit bei $m$ Aufrufen mit $\mathcal{O}(m)$. Damit ergibt sich dann wieder, wie auch bei der mehrfach wiederholten Suche nach einem vorhandenen Schlüssel und in der Aufgabenstellung beschrieben, dass die Laufzeit $\mathcal{O}(n+m)$ ist.
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item Die Permutationen $\sigma(i) = i$ liefert einen Splay-Baum der Höhe $n$.
+            \begin{definition*}
+                Wir nennen einen Baum \emph{vollständig linkslastig}, wenn jeder Elternknoten nur ein linkes Kind hat.
+            \end{definition*}
+            \begin{proof}
+                Wir zeigen per Induktion: Nach $i$ Iterationen ist ein vollständig linkslastiger Splay-Baum der Höhe $i$ entstanden.
+
+                Induktionsanfang: Nach einer Iteration ist ein vollständig linkslastiger Splay-Baum der Höhe 1 mit Element entstanden.
+
+                Induktionsvoraussetzung: Es sei nach $i$ Iterationen vollständig linkslastiger ein Splay-Baum der Höhe $i$ entstanden.
+
+                Induktionsschritt: Dann entsteht auch nach $i + 1$ Iterationen ein vollständig linkslastiger Splay-Baum der Höhe $i + 1$. Wir fügen nun den Knoten $i + 1$ ein. Da der Baum so linkslastig ist, wird dieses Element als einziges rechts von der Wurzel eingefügt. Nun ist Node$(i + 1)$.{\ttfamily p.p} = None und Node$(i + 1)$ = Node$(i + 1)$.{\ttfamily p.right}, also wird {\ttfamily Rotate-Left} in dem Wurzelknoten ausgeführt. Hier wird Node$(i + 1)$ zum Wurzelknoten des Baumes gemacht und sein linkes Kind auf den vorigen Wurzelknoten gesetzt. So entsteht wieder ein vollständig linkslastiger Splaybaum der Höhe $i + 1$.
+            \end{proof}
+            \item Die Permutation $\sigma(1) = 1, \sigma(2) = 3, \sigma(3) = 2$ liefert einen Splay-Baum der Höhe $1$, was der minimalen Höhe für dreielementige Suchbäume entspricht:
+            \begin{center}
+                \begin{forest}
+                    for tree={draw, circle, minimum size=5ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [2
+                        [1]
+                        [3]
+                    ]
+                \end{forest}
+            \end{center}
+
+            Die Permutation $\sigma(1) = 7, \sigma(2) = 1, \sigma(3) = 5, \sigma(4) = 3, \sigma(5) = 6, \sigma(6) = 2, \sigma(7) = 4$ liefert einen Splay-Baum der Höhe $2$, was der minimalen Höhe für siebenelementige Suchbäume entspricht:
+            \begin{center}
+                \begin{forest}
+                    for tree={draw, circle, minimum size=5ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [4, label=above:{\tiny 7}
+                        [2, label=left:{\tiny 6}
+                            [1, label=below:{\tiny 2}]
+                            [3, label=below:{\tiny 4}]
+                        ]
+                        [6, label=right:{\tiny 5}
+                            [5, label=below:{\tiny 3}]
+                            [7, label=below:{\tiny 1}]
+                        ]
+                    ]
+                \end{forest}
+            \end{center}
+            Ebenso hätte man hier stattdessen von der linken Seite aus beginnen können.
+            
+            Für $n = 15$ ohne Bonuspunkte und allgemein für $n = 2^k-1$ formlos: Kommt mir so vor, als wäre immer von unten nach oben, links-rechts so weit außen wie übrig alterierend korrekt. Also, $n = 15$ ist beispielsweise $1, 15, 3, 13, 5, 11, 7, 9, 2, 14, 6, 10, 4, 12, 8$. Für $n = 31$ gilt diese Ordnung ebenso. Die offene Forschungsfrage des Beweises gebe ich aber zurück an die Profis.
+        \end{enumerate}
+    \end{aufgabe}
+\end{document}

@@ -1,0 +1,429 @@
+\documentclass{scrartcl} % file is in UTF-8 Encoding
+
+\usepackage[T1]{fontenc}
+
+\input{template}
+%---------------- VARS --------------%
+\newcommand{\headvorlage}{	
+	\group{24} \hfill \textbf{\semester} \\
+	\begin{tabular}{@{}l r}
+		\student{Philine Stella Bock}{507316}
+		\student{Devagya Sharma}{495395}
+		\student{Simon Seemüller}{513084}
+	\end{tabular}
+	\haloesung{03}
+}
+
+\begin{document}
+    \setcounter{auf}{0}
+	\headvorlage
+    \begin{aufgabe}
+        Anfangs sieht der Baum so aus:
+        \begin{center}
+            \begin{forest}
+            for tree={draw, circle, minimum size=6ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+            [12 
+                [3 
+                    [1 
+                        [10] 
+                        [8]] 
+                    [2]] 
+                [4 
+                    [5] 
+                    [9]]]
+            \end{forest}
+        \end{center}
+        Zunächst konstruiert der Algorithmus einen MaxHeap.
+        \begin{center}
+            \begin{forest}
+            for tree={draw, circle, minimum size=6ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+            [12 [10 [8 [1] [3]] [2]] [9 [5] [4]]]
+            \end{forest}
+        \end{center}
+        Nun tauschen wir immer das letzte Element im Heap mit dem ersten, entkoppeln es und f\"uhren {\ttfamily MaxHeapify(A, 1)} aus.
+        \begin{center}
+            \begin{forest}
+            for tree={draw, circle, minimum size=6ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+            [10
+                [8
+                    [3
+                        [1]
+                        [12, no edge]]
+                    [2 [1, phantom]]]
+                [9
+                    [5]
+                    [4]]]
+            \end{forest}
+        \end{center}
+        \begin{center}
+            \begin{forest}
+            for tree={draw, circle, minimum size=6ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+            [9
+                [8
+                    [3
+                        [10, no edge]
+                        [12, no edge]]
+                    [2 [1, phantom]]]
+                [5
+                    [1]
+                    [4]]]
+            \end{forest}
+        \end{center}
+        \begin{center}
+            \begin{forest}
+            for tree={draw, circle, minimum size=6ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+            [8
+                [4
+                    [3
+                        [10, no edge]
+                        [12, no edge]]
+                    [2 [1, phantom]]]
+                [5
+                    [1]
+                    [9, no edge]]]
+            \end{forest}
+        \end{center}
+        \begin{center}
+            \begin{forest}
+            for tree={draw, circle, minimum size=6ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+            [5
+                [4
+                    [3
+                        [10, no edge]
+                        [12, no edge]]
+                    [2 [1, phantom]]]
+                [1
+                    [8, no edge]
+                    [9, no edge]]]
+            \end{forest}
+        \end{center}
+        \begin{center}
+            \begin{forest}
+            for tree={draw, circle, minimum size=6ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+            [4
+                [3
+                    [2
+                        [10, no edge]
+                        [12, no edge]]
+                    [5, no edge [1, phantom]]]
+                [1
+                    [8, no edge]
+                    [9, no edge]]]
+            \end{forest}
+        \end{center}
+        \begin{center}
+            \begin{forest}
+            for tree={draw, circle, minimum size=6ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+            [3
+                [2
+                    [4, no edge
+                        [10, no edge]
+                        [12, no edge]]
+                    [5, no edge [1, phantom]]]
+                [1
+                    [8, no edge]
+                    [9, no edge]]]
+            \end{forest}
+        \end{center}
+        \begin{center}
+            \begin{forest}
+            for tree={draw, circle, minimum size=6ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+            [2
+                [1
+                    [4, no edge
+                        [10, no edge]
+                        [12, no edge]]
+                    [5, no edge [1, phantom]]]
+                [3, no edge
+                    [8, no edge]
+                    [9, no edge]]]
+            \end{forest}
+        \end{center}
+        \begin{center}
+            \begin{forest}
+            for tree={draw, circle, minimum size=6ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+            [1
+                [2, no edge
+                    [4, no edge
+                        [10, no edge]
+                        [12, no edge]]
+                    [5, no edge [1, phantom]]]
+                [3, no edge
+                    [8, no edge]
+                    [9, no edge]]]
+            \end{forest}
+        \end{center}
+        Also gibt der Algorithmus zurück: 
+        \begin{center}
+            \renewcommand{\arraystretch}{1.5}
+            \newcommand{\colwdth}{3ex}
+            \begin{tabular}{|m{\colwdth}<{\centering}|m{\colwdth}<{\centering}|m{\colwdth}<{\centering}|m{\colwdth}<{\centering}|m{\colwdth}<{\centering}|m{\colwdth}<{\centering}|m{\colwdth}<{\centering}|m{\colwdth}<{\centering}|m{\colwdth}<{\centering}|}
+                \hline 
+                \rowcolor{teal!60}
+                 1 & 2 & 3 & 4 & 5 & 8 & 9 & 10 & 12\\\hline
+            \end{tabular}
+        \end{center}
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item Wir konstruieren einen Algorithmus wie folgt: Zunächst wird der Algorithmus den Bellmann-Ford-Algorithmus regulär $\lvert V\rvert$ Mal nutzen. Falls ein kürzester Weg existiert, findet der Algorithmus ihn spätestens in dieser Anzahl von Durchläufen. Wir lassen den Algorithmus noch ein letztes Mal laufen und vergleichen die Liste der Potentiale mit der Liste der Potentiale davor. Alle Knoten, deren Potential sich nun in dieser letzten Iteration noch verändert, speichern wir in einer Menge ab.
+        
+            Danach führen wir eine Breitensuche durch. Wir wissen, dass alle Knoten, die wir in der Menge abgespeichert haben, vom Startknoten aus erreichbar sein müssen. Falls wir also nun in dieser Menge mindestens einen Knoten finden, von dem aus der Endknoten erreichbar ist, wissen wir, dass es einen Weg vom Startknoten über Knoten, deren Potential sich weiterhin negativ verändert, die also Teil eines Weges ausgehend von oder auf einem negativen Kreis sind, zum Endknoten, also keinen kürzesten Weg vom Start- zum Endknoten, gibt.
+        
+            Daher initialisieren wir nicht eine Breitensuche für jeden Knoten in der Menge, sondern können lediglich die Queue wie auch die Liste der besuchten Knoten mit der gespeicherten Menge. Dadurch liegt dieser letzte Schritt nicht wie erwartet in $\BigO(\lvert V\rvert \cdot (\lvert V \rvert + \lvert E\rvert))$ liegt, sondern stattdessen nur in $\BigO(\lvert V \rvert + \lvert E\rvert)$.
+        
+            Da wir also von Knoten aus, die sowohl von unserem Startknoten aus erreicht werden können, als auch nach der letzten Iteration des Algorithmus noch eine negative Veränderung ihres Potentials erfahren, sehen, ob wir den Endknoten erreichen, wissen wir, ob sich ein Kreis negativer Länge auf dem Weg von Start- zu Endknoten befindet.
+
+            Der genaue Algorithmus \ref{alg:kurzesterweg} befindet sich bei Interesse ganz unten auf dem Blatt.
+            \item Wir demonstrieren den Algorithmus an den beiden Graphen. Zunächst benennen wir die Knoten wie folgt:
+            \begin{center}
+                \begin{tikzpicture}[
+                    node distance = 4cm and 4cm,
+                    V/.style = {circle, draw, fill=teal, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize}
+                    ]
+                    \begin{scope}[nodes=V]
+                        \node[label=left:{$s$}] (r) at (-2,0) {};
+                        \node[label=left:{$t$}] (s) at (-2,-2) {};
+                        \node[label=above:{$u$}] (t) at (0,0) {};
+                        \node[label=below:{$y$}] (x) at (0,-2) {};
+                        \node[label=above:{$v$}] (u) at (1.90211,0.61803) {};
+                        \node[label=below:{$x$}] (w) at (1.90211,-2.618033) {};
+                        \node[label=right:{$w$}] (v) at (3.07768,-1) {};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, thick, NavyBlue,->]
+                        \draw (r) -- (s);
+                        \draw (r) -- (t);
+                        \draw (t) -- (u);
+                        \draw (u) -- (v);
+                        \draw (v) -- (w);
+                        \draw (w) -- (x);
+                        \draw (x) -- (t);
+                        \draw (x) -- (s);
+                    \end{scope}
+                \end{tikzpicture}
+            \end{center}
+
+            Nun erstellen wir eine Tabelle, die das Potential der Knoten auf dem Graphen nach der $i$-ten Iteration des Algorithmus darstellt.
+            
+            \newcommand{\colwdth}{6ex}
+            \begin{center}
+                \renewcommand{\arraystretch}{1.5}
+                \begin{tabular}{|m{1cm}|m{\colwdth}<{\centering}|m{\colwdth}<{\centering}|m{\colwdth}<{\centering}|m{\colwdth}<{\centering}|m{\colwdth}<{\centering}|m{\colwdth}<{\centering}|m{\colwdth}<{\centering}|}
+                \hline\rowcolor{teal!60}
+                    & $s$ & $t$ & $u$ & $v$ & $w$ & $x$ & $y$\\\hline
+                    1 & 0 & 0 & 95 & 99 & 98 & 97 & 96\\
+                    2 & 0 & 0 & 90 & 94 & 93 & 92 & 91\\
+                    3 & 0 & 0 & 85 & 89 & 88 & 87 & 86\\
+                    4 & 0 & 0 & 80 & 84 & 83 & 82 & 81\\
+                    5 & 0 & 0 & 75 & 79 & 78 & 77 & 76\\
+                    6 & 0 & 0 & 70 & 74 & 73 & 72 & 71\\
+                    7 & 0 & 0 & 65 & 69 & 68 & 67 & 66\\\hline
+                    8 & 0 & 0 & 60 & 64 & 63 & 62 & 61\\\hline
+                \end{tabular}
+            \end{center}
+            Nach der siebten Iteration speichern wir die Potentiale zwischen. Alle Knoten, deren Potential sich in Iteration acht verändern, speichern wir in einer Menge $Z = \{u, v, w, x, y\}$. Die packen wir in eine Warteschlange wie auch in die Liste der bereits besuchten Knoten und führen damit eine Breitensuche durch. Die Breitensuche wird die folgenden Knoten (grün markiert) und Kanten (blau markiert) zurückgeben:
+            \begin{center}
+                \begin{tikzpicture}[
+                    node distance = 4cm and 4cm,
+                    V/.style = {circle, draw={green}, very thick, fill=teal, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize},
+                    A/.style = {circle, draw, fill=teal, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize}
+                    ]
+                    \begin{scope}[nodes=V]
+                        \node[label=left:{$t$}] (s) at (-2,-2) {};
+                        \node[label=above:{$u$}] (t) at (0,0) {};
+                        \node[label=below:{$y$}] (x) at (0,-2) {};
+                        \node[label=above:{$v$}] (u) at (1.90211,0.61803) {};
+                        \node[label=below:{$x$}] (w) at (1.90211,-2.618033) {};
+                        \node[label=right:{$w$}] (v) at (3.07768,-1) {};
+                    \end{scope}
+                    \begin{scope}[nodes=A]
+                        \node[label=left:{$s$}] (r) at (-2,0) {};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, thick, NavyBlue,->]
+                        \draw (x) -- (s);
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, dashed, thin, gray]
+                        \draw (r) -- (s);
+                        \draw (r) -- (t);
+                        \draw (t) -- (u);
+                        \draw (u) -- (v);
+                        \draw (v) -- (w);
+                        \draw (w) -- (x);
+                        \draw (x) -- (t);
+                    \end{scope}
+                \end{tikzpicture}
+            \end{center}
+            Die Kanten zwischen den Knoten in $Z$ werden nicht von der Breitensuche zurückgegeben, da sie nur zwischen bereits bekannten Knoten verlaufen. Da der Algorithmus den ursprünglichen Endknoten gefunden hat, terminiert er mit {\ttfamily false} und zeigt so, dass es keinen kürzesten Weg zwischen Anfangs- und Endknoten gibt.\\[\medskipamount]
+            Für den anderen Graphen ist sowohl unsere Benennung der Knoten als auch die zurückgegebene Potentialtabelle äquivalent. Die Breitensuche gibt hier jedoch einen anderen Graphen zurück:
+            \begin{center}
+                \begin{tikzpicture}[
+                    node distance = 4cm and 4cm,
+                    V/.style = {circle, draw={green}, very thick, fill=teal, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize},
+                    A/.style = {circle, draw, fill=teal, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize}
+                    ]
+                    \begin{scope}[nodes=V]
+                        \node[label=above:{$u$}] (t) at (0,0) {};
+                        \node[label=below:{$y$}] (x) at (0,-2) {};
+                        \node[label=above:{$v$}] (u) at (1.90211,0.61803) {};
+                        \node[label=below:{$x$}] (w) at (1.90211,-2.618033) {};
+                        \node[label=right:{$w$}] (v) at (3.07768,-1) {};
+                    \end{scope}
+                    \begin{scope}[nodes=A]
+                        \node[label=left:{$s$}] (r) at (-2,0) {};
+                        \node[label=left:{$t$}] (s) at (-2,-2) {};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, thick, NavyBlue,->]
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, dashed, thin, gray]
+                        \draw (r) -- (s);
+                        \draw (r) -- (t);
+                        \draw (t) -- (u);
+                        \draw (u) -- (v);
+                        \draw (v) -- (w);
+                        \draw (w) -- (x);
+                        \draw (x) -- (t);
+                    \end{scope}
+                \end{tikzpicture}
+            \end{center}
+            Da es hier keinen Weg von einem der Knoten, die unserer Breitensuche in die Warteschlange übergeben werden, zu einem Knoten gibt, der außerhalb des Kreises liegt, wird kein Knoten außerhalb des Kreises besucht. Da die Breitensuche hier nicht den ursprünglichen Endknoten $t$ zurückgibt, terminiert der Algorithmus mit {\ttfamily true}.
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        Wir zeigen, dass für einen einfachen gerichteten Graphen $G=(V,E,\Psi)$ mit Kantenlänge $c_e, e \in E$, wobei es keine negativen Kreise gibt und $c$ ganzzahlig ist, der Ford Algorithmus nach höchstens $C \cdot |V|^2$ Iterationen mit $C:=2 \cdot \max_{e \in E}|c_e|+1$ terminiert.
+        
+        Der Algorithmus terminiert nach Theorem (Folie \href{https://isis.tu-berlin.de/pluginfile.php/3544388/mod_resource/content/2/Kapitel15.pdf}{$15\mid10$}) in jedem Fall nach endlichen Iterationen, da es keine negativen Kreise gibt und somit gilt, dass das Potential von $y$ mit $y_r = 0$ gegeben ist. Da für jedes $v \in V$ der Algorithmus mit p einen kürzesten Weg der Länge $y_v$ definiert, ist die Anzahl der Verringerungen von $y_v$ begrenzt. Wir zeigen nun, dass die Anzahl dieser Iterationen nach oben beschränkt ist.
+        
+        Da Kantengewichte der Pfade $c_e, e \in E$ ganzzahlig sind und die Anzahl der Verringerungen von $y_v$ begrenzt ist, ist die kleinste Verringerung von $y_v$ gegeben mit $1$, da $y_w > y_v +c_e$ gelten muss. Diese Bedingung ist nur erfüllt, wenn die Verringerung mindestens eins beträgt und ganzzahlig ist, da $c_e \in \mathbb\Z$ gilt und der Algorithmus in jeder Iteration mit erfüllter Bedingung $y_w$ auf das momentane $y_v + c_e$ setzt. Die maximale Anzahl der Iterationen ergibt sich, wenn jede Iteration die kleinstmögliche Verringerung von $y_v$ erzeugt. 
+        
+        Ein Pfad hat eine Pfadlänge $\leq |V|$, da es maximal eine Kante zwischen zwei Knoten geben kann, was bei einem positiven Kreis im Maximalfall bei $|V|$ Knoten $|V|$ Kanten wären. %Ab diesem Moment könnten keine Verbesserung der Kantengewichte im Kreis mehr erzielt werden, da es keine negativen Kreise gibt.
+        
+        Zudem würde im maximalen Fall jede Kante maximale Kantengewichte aufweisen, also $$\underset{e \in E}{\max} \ c_e \leq \underset{e \in E}{\max}|c_e|. $$ Da die Kantengewichte ganzzahlig sind, gibt es sowohl positive als auch negative Kantengewichte, womit die Anzahl der möglichen Kantengewichte gegeben ist mit $2 \cdot |c_e| , e \in E$. Dies umfasst alle Kantengewichte $\neq 0$. Da $0$ als Kantengewichte nicht ausgeschlossen ist, gibt es einen weiteren Kantengewichte, womit die Anzahl $2 \cdot |c_e| +1, e \in E$ beträgt. Für den maximalen Fall ergibt sich somit $$2\cdot \underset{e \in E}{\max}|c_e|+1 = C$$.
+        
+        Somit ist die maximale Anzahl möglicher Verbesserungen für ein $v \in V$ gegeben mit $$(2\cdot \underset{e \in E}{\max}|c_e|+1) \cdot |V| = C \cdot |V|.$$  \\
+        Der Ford-Algorithmus findet für einen Startknoten $r \in V$ den kürzesten Pfad für alle $v \in V$. Das heißt, es gibt maximal $|V|$ mal so viele Iterationen, damit dies für alle $v \in V$ gilt. Damit folgt: $$ (2\cdot \underset{e \in E}{\max}|c_e|+1) \cdot |V| \cdot |V| = (2\cdot \underset{e \in E}{\max}|c_e|+1) \cdot |V|^2 = C \cdot |V|^2.$$ Da wir angenommen haben, dass es sich um den maximalen Fall, mit maximalen Kantengewichte handelt und die Länge der Pfade, sowie die Kantengewichte abgeschätzt haben, mit einer oberen Schranke, ergibt sich, dass der Algorithmus nach höchstens $C \cdot |V|^2$ Iterationen terminiert. 
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item Wir zeigen, dass es möglich ist, zwei CoMa-Heaps in $\BigO(\log n)$ miteinander zu verschmelzen. Wir gehen davon aus, dass wir für die Bäume innerhalb des CoMa-Heaps die Darstellung von Folie \href{https://isis.tu-berlin.de/pluginfile.php/3535837/mod_resource/content/2/Kapitel13.pdf}{$13\mid 37$} nutzen und noch ein weiteres Feld {\ttfamily x.size} hinzufügen.
+
+            Wir schreiben zunaechst eine Funktion {\ttfamily MergeTrees}:
+            
+            \begin{algorithm}[H]
+                \caption{\ttfamily mergeTrees(x, y)}
+                \If{x.head.key > y.head.key}{
+                    y.head.rsibling $\gets$ x.head.lchild\\
+                    x.head.lchild $\gets$ y.head\\
+                    x.size $\gets$ x.size + 1\\
+                    \Return x
+                }
+                \Else{
+                    x.head.rsibling $\gets$ y.head.lchild\\
+                    y.head.lchild $\gets$ x.head\\
+                    y.size $\gets$ y.size + 1\\
+                    \Return y
+                }
+            \end{algorithm}
+            Diese Funktion läuft in $\BigO(1)$. Sie greift nur direkt auf Werte zu, ohne Schleifen durchlaufen zu müssen oder sich selbst rekursiv aufzurufen.
+            
+            Wir haben in Aufgabe \href{https://www.youtube.com/watch?v=dQw4w9WgXcQ}{$3$(d)} des letzten Blattes bereits gezeigt, dass ein CoMa-Heap, der $n$ Elemente enthält, höchstens $\lceil \log n\rceil$ CoMa-Bäume enthalten kann. Wir legen einen neuen Heap an wie folgt: Wie wenden auf die beiden Heaps die {\ttfamily merge}-Funktion -- von MergeSort -- nach den Baumordnungen an. Nachdem beide Heaps so sortiert in einer Liste stehen, gehen wir von links nach rechts durch die Liste durch. Falls wir hintereinander zwei Bäume finden, die die gleiche Größe haben, so wenden wir auf diese beiden Bäume die {\ttfamily mergeTrees}-Funktion an. So entsteht ein neuer Heap, der keine zwei Bäume gleicher Größe enthält.
+            \begin{theorem*}
+                Der Algorithmus hat Laufzeitfunktion in $\BigO(\log n)$.
+            \end{theorem*}
+            \begin{proof}
+            Der erste Schritt ist, die {\ttfamily merge}-Funktion anzuwenden. Deren Laufzeit ist in der Länge des kürzeren Heaps, also höchstens in $\BigO(\log n)$. Zwei Bäume zu verschmelzen geschieht nach unserer Implementation in $\BigO(1)$. Die Anzahl der {\ttfamily mergeTrees}-Operationen ist durch die Hälfte der Gesamtanzahl der Bäume beschränkt. Damit ergibt sich eine Gesamtlaufzeit von $\BigO(\log n)$.
+            \end{proof}
+            \begin{theorem*}
+                Der Algorithmus ist korrekt.
+            \end{theorem*}
+            \begin{proof}
+                Jeder CoMa-Baum erfüllt weiterhin die Max-Heap-Eigenschaft. Der einzige Punkt, an dem wir die CoMa-Bäume verändern, ist in der {\ttfamily mergeTrees}-Funktion. Dort hängen wir einen Baum mit Max-Heap-Eigenschaft so an einen Knoten an, dass der grössere Knoten der Eltern- und der kleinere Knoten der Kindknoten ist. Damit bleibt die MaxHeap-Eigenschaft erhalten.
+
+                Fuer jedes $k\geq 0$ gibt es weiterhin höchstens einen CoMa-Baum der Ordnung $k$. Da wir alle Bäume gemeinsamer Größe mit der {\ttfamily mergeTree}-Funktion mergen, wenn sie nebeneinander stehen und sie aufgrund der {\ttfamily merge}-Funktion nebeneinander stehen müssen, weil sie in {\ttfamily merge} ihrer Größe nach geordnet bleiben, existieren nach dem letzten Schritt keine zwei Bäume gleicher Größe mehr.
+
+                Die CoMa-Bäume sind weiterhin nach Ordnung aufsteigend sortiert. Die {\ttfamily merge}-Funktion behält die Bäume nach ihren Ordnungen sortiert. Auch die {\ttfamily mergeTrees}-Funktion ändert nichts an der Sortierung. Daher bleiben die Bäume nach Ordnung aufsteigend sortiert.
+            \end{proof}
+            \item ~
+            
+            \begin{algorithm}[H]
+                \caption{\ttfamily Insert(B, k)}
+                \ttfamily init(A, k)\\
+                merge(A, B)
+            \end{algorithm}
+            \begin{algorithm}[H]
+                \caption{\ttfamily ExtractMax(B)}
+                maxpos $\gets$ 1\\
+                \For{$i \gets 1$ \KwTo length(B)}{
+                    \If{B[maxpos, 1] < B[i, 1]}{
+                        maxpos $\gets i$
+                    }
+                }
+                \ttfamily delete(B, [maxpos, 1])
+            \end{algorithm}
+            \begin{algorithm}[H]
+                \caption{\ttfamily IncreaseKey(B, i, k)}
+                \If{B[i] > k}{
+                    \Return \glqq Key zu klein\grqq
+                }
+                \ttfamily delete(B, i)\\
+                insert(B, k)
+                
+            \end{algorithm}
+        \end{enumerate}
+    \end{aufgabe}
+    \newpage
+    \appendix
+    \begin{algorithm}
+        \caption{Algorithmus zur Existenzbestimmung eines kürzesten Pfades}
+        \label{alg:kurzesterweg}
+            \For{$v \in V$}{
+                $y_v \gets \infty$,
+                $p(v) \gets$ None
+            }
+            \For{$i \gets 1$ \KwTo $\lvert V\rvert - 1$}{
+                \For{$e \in E$}{
+                    \If{$y_w > y_v + c_e$ with $\Psi(e) = (v, w)$}{
+                        $y_w \gets y_v + c_e$,
+                        $p(w) \gets e$ 
+                    }
+                }
+            }
+            \For{$v \in V$}{
+                $z_v \gets y_v$ \Comment*[r]{Potentiale zwischenspeichern}
+            }
+            \Comment{Wir lassen den Algorithmus noch eine weitere Iteration machen, um zu sehen, welche Knoten ihr Potential verändern.}
+            \For{$e \in E$}{
+                    \If{$y_w > y_v + c_e$ with $\Psi(e) = (v, w)$}{
+                        $y_w \gets y_v + c_e$,
+                        $p(w) \gets e$ 
+                    }
+            }
+            \For{$v \in V$}{
+            \Comment{Alle Knoten mit verändertem Potential speichern wir in einer separaten Menge.}
+                \If{$y_v < z_v$}{
+                    $Z \gets Z \cup \{y_v\}$ 
+                }
+            }
+            \Comment{Nun lassen wir für all diese Knoten eine Breitensuche durchlaufen.}
+            $R \gets Z$,
+            $F \gets \emptyset$,
+            $Q \gets Z$\\
+            \While{$Q \neq \emptyset$}{
+                $v \gets Q.next$\\
+                \If{$\exists e \in \delta^+(v)$ mit $w \in \Psi(e) \setminus R$}{
+                    \If{$w == t$}{
+                        \Return False
+                    }
+                    $R \gets R \cup \{w\}$, 
+                    $Q \gets Q \cup \{w\}$, 
+                    $F \gets F \cup \{e\}$\\
+                }
+                \Else{$Q \gets Q \setminus \{v\}$}
+            }
+            \Return True
+        \end{algorithm}
+\end{document}

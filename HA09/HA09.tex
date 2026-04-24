@@ -1,0 +1,234 @@
+\documentclass{scrartcl} % file is in UTF-8 Encoding
+
+\usepackage[T1]{fontenc}
+
+\input{template}
+%---------------- VARS --------------%
+\newcommand{\headvorlage}{	
+	\group{24} \hfill \textbf{\semester} \\
+	\begin{tabular}{@{}l r}
+		\student{Philine Stella Bock}{507316}
+		\student{Devagya Sharma}{495395}
+		\student{Simon Seemüller}{513084}
+	\end{tabular}
+	\haloesung{09}
+}
+
+\forestset{default preamble={
+for tree={draw, circle, minimum size=3ex, fill=teal!60, inner sep = 5pt, s sep=7mm}}}
+% äüöß
+\begin{document}
+	\headvorlage 
+    \begin{aufgabe}
+    
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item Wir fügen zunächst über lineares Sondieren die Elemente ein. Wir zeigen die Hash-Tabelle zu signifikanten Zeitpunkten.
+
+            Zu Einfügen der $31$ ist der Index, den die $31$ annehmen würde, bereits von der $13$ belegt. Die $13$ hat nicht weniger Sondierungen als die $31$, daher bleibt die $13$ in dem Slot und die $31$ wandert ein Feld weiter.
+            \begin{center}
+                \begin{tabular}{|m{2cm}|m{1cm}<{\centering}|m{1cm}<{\centering}|}
+                \hline
+                     \rowcolor{teal!60} Index & $k$& $i$\\\hline
+                     0 & & \\
+                     1 & & \\
+                     2 & & \\
+                     3 & & \\
+                     4 & 68 & 0\\
+                     5 & & \\
+                     6 & 47 & 0\\
+                     7 & & \\
+                     8 & & \\
+                     9 & & \\
+                     10 & & \\
+                     11 & & \\
+                     12 & 13 & 0\\
+                     13 & 31 & 1\\
+                     14 & & \\
+                     15 & & \\\hline 
+                \end{tabular}
+            \end{center}
+            Das Einfügen der 40 ist der nächste spannende Zeitpunkt. Sie kollidiert zunächst mit der 13 in Adresse 12, dann mit der 31 in Adresse 13, da diese aber auch schon eine Sondierung hatte, bleibt sie, dann kollidiert sie mit der 10 und wirft diese aus der Adresse. Nun geht die 10 weiter und kollidiert mit der 78. Sie hat bereits eine Sondierung mehr, die 78 muss also weichen und landet in Adresse 0. Danach sieht die Tabelle so aus:
+            \begin{center}
+                \begin{tabular}{|m{2cm}|m{1cm}<{\centering}|m{1cm}<{\centering}|}
+                \hline
+                     \rowcolor{teal!60} Index & $k$& $i$\\\hline
+                     0 & 78 & 1\\
+                     1 & & \\
+                     2 & & \\
+                     3 & 65 & 0\\
+                     4 & 68 & 0\\
+                     5 & & \\
+                     6 & 47 & 0\\
+                     7 & & \\
+                     8 & & \\
+                     9 & & \\
+                     10 & & \\
+                     11 & & \\
+                     12 & 13 & 0\\
+                     13 & 31 & 1\\
+                     14 & 40 & 2\\
+                     15 & 10 & 1\\\hline 
+                \end{tabular}
+            \end{center}
+            Beim Einfügen der $9$ möchte diese in Adresse 3, diese ist belegt. Sie sondiert zu Adresse 4, deren $i$ ist geringer, deshalb geht sie dort herein. Die 68 wandert ein Feld weiter. Danach wird noch die 20 eingefügt. Diese hätte Adresse 6 und wandert, da belegt, zu Adresse 7 weiter. Die finale Tabelle sieht dann so aus:
+            \begin{center}
+                \begin{tabular}{|m{2cm}|m{1cm}<{\centering}|m{1cm}<{\centering}|}
+                \hline
+                     \rowcolor{teal!60} Index & $k$& $i$\\\hline
+                     0 & 78 & 1\\
+                     1 & & \\
+                     2 & & \\
+                     3 & 65 & 0\\
+                     4 & 9 & 1\\
+                     5 & 68 & 1\\
+                     6 & 47 & 0\\
+                     7 & 20 & 1\\
+                     8 & & \\
+                     9 & & \\
+                     10 & & \\
+                     11 & & \\
+                     12 & 13 & 0\\
+                     13 & 31 & 1\\
+                     14 & 40 & 2\\
+                     15 & 10 & 1\\\hline 
+                \end{tabular}
+            \end{center}
+            \item Auch hier kollidiert die 31 mit der 13 in Adresse 12. Die 31 sondiert quadratisch weiter zu Adresse 15.
+            \begin{center}
+                \begin{tabular}{|m{2cm}|m{1cm}<{\centering}|m{1cm}<{\centering}|}
+                \hline
+                     \rowcolor{teal!60} Index & $k$& $i$\\\hline
+                     0 & & \\
+                     1 & & \\
+                     2 & & \\
+                     3 & & \\
+                     4 & 68 & 0\\
+                     5 & & \\
+                     6 & 47 & 0\\
+                     7 & & \\
+                     8 & & \\
+                     9 & & \\
+                     10 & & \\
+                     11 & & \\
+                     12 & 13 & 0\\
+                     13 & & \\
+                     14 & & \\
+                     15 & 31 & 1\\\hline 
+                \end{tabular}
+            \end{center}
+            Die naechste interessante Kollision passiert beim Einfuegen der $40$ in die Hashtabelle. Sie kollidiert zunaechst in Position 12 mit der 13, sondiert weiter, versucht Position 15, findet dort die 31 mit ebenfalls einer Sondierung, sondiert weiter, findet die 47 in Position 6 mit 0 Sondierungen. Die 47 geht weiter zu Position 9. Danach sieht die Tabelle so aus:
+            \begin{center}
+                \begin{tabular}{|m{2cm}|m{1cm}<{\centering}|m{1cm}<{\centering}|}
+                \hline
+                     \rowcolor{teal!60} Index & $k$& $i$\\\hline
+                     0 & & \\
+                     1 & & \\
+                     2 & 78 & 1\\
+                     3 & 65 & 0\\
+                     4 & 68 & 0\\
+                     5 & & \\
+                     6 & 40 & 2\\
+                     7 & & \\
+                     8 & & \\
+                     9 & 47 & 1\\
+                     10 & & \\
+                     11 & & \\
+                     12 & 13 & 0\\
+                     13 & & \\
+                     14 & 10 & 0\\
+                     15 & 31 & 1\\\hline 
+                \end{tabular}
+            \end{center}
+            Nach Einfuegen der 9 und der 20 mit einigen Kollisionen sieht die Tabelle so aus:
+            \begin{center}
+                \begin{tabular}{|m{2cm}|m{1cm}<{\centering}|m{1cm}<{\centering}|}
+                \hline
+                     \rowcolor{teal!60} Index & $k$& $i$\\\hline
+                     0 & 20 & 2\\
+                     1 & & \\
+                     2 & 78 & 1\\
+                     3 & 65 & 0\\
+                     4 & 68 & 0\\
+                     5 & & \\
+                     6 & 40 & 2\\
+                     7 & & \\
+                     8 & & \\
+                     9 & 47 & 1\\
+                     10 & & \\
+                     11 & & \\
+                     12 & 13 & 0\\
+                     13 & 9 & 2\\
+                     14 & 10 & 0\\
+                     15 & 31 & 1\\\hline 
+                \end{tabular}
+            \end{center}
+            \item Wir ueberspringen alle Schritte hier und kommen zum Endergebnis:
+            \begin{center}
+                \begin{tabular}{|m{2cm}|m{1cm}<{\centering}|m{1cm}<{\centering}|}
+                \hline
+                     \rowcolor{teal!60} Index & $k$& $i$\\\hline
+                     0 & & \\
+                     1 & & \\
+                     2 & & \\
+                     3 & 65 & 0\\
+                     4 & 68 & 0\\
+                     5 & & \\
+                     6 & 47 & 0\\
+                     7 & 40 & 1\\
+                     8 & & \\
+                     9 & 10 & 1\\
+                     10 & 13 & 1\\
+                     11 & & \\
+                     12 & 20 & 1\\
+                     13 & 9 & 1\\
+                     14 & 31 & 1\\
+                     15 & 78 & 0\\\hline 
+                \end{tabular}
+            \end{center}
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item \begin{theorem*}
+                $c_1 = c_2 = \frac{1}{2}$.
+            \end{theorem*}
+            \begin{proof}[Beweis durch vollstaendige Induktion.]
+                Wir zeigen durch vollstaendige Induktion, dass in jeder $(i + 1)$-ten Iteration der While-Schleife
+                \[
+                    h'(k, i) = \Big(h(k) + \frac{1}{2}i^2 + \frac{1}{2}i\Big) \mod m
+                \]
+                ist.
+                
+                Induktionsanfang $(i = 0)$: $j$ ist die Position, an der nach dem Eintrag geschaut wird. Damit ist $h(k)$ allgemein $j$. In der ersten Iteration ist 
+                \[
+                    j = h'(k, 0) = \Big(h(k) + \frac{1}{2}\cdot 0^2 + \frac{1}{2}\cdot 0\Big) \mod m
+                \]
+                und der Induktionsanfang gilt.
+
+                Induktionsvoraussetzung: Fuer ein beliebiges, aber feste Iteration $i + 1$ gelte:
+                \[
+                    j = h'(k, i) \Big(h(k) + \frac{1}{2}i^2 + \frac{1}{2}i\Big)\mod m
+                \]
+                Induktionsschritt: Dann gilt auch:
+                \[
+                    j = h'(k, i + 1) = \Big(h(k) + \frac{1}{2}(i + 1)^2 + \frac{1}{2}(i + 1)\Big)\mod m.
+                \]
+                In jeder Iteration der While-Schleife wird j + $i =$ Schleifenaufrufe + 1 gerechnet. Daher gilt im $i$-ten Schleifenaufruf laut Induktionsvoraussetzung:
+                \begin{align*}
+                    j = h'(k, i + 1) &= \Big(h(k) + \frac{1}{2}i^2 + \frac{1}{2}i + i + 1\Big)\mod m\\
+                    &= \Big(h(k) + \frac{1}{2}i^2 + \frac{3}{2}i + 1\Big)\mod m\\
+                    &= \Big(h(k) + \frac{1}{2}i^2 + \frac{1}{2}i + i + \frac{1}{2} + \frac{1}{2}\Big) \mod m\\
+                    &= \Big(h(k) + \frac{1}{2}(i^2 + 2i + 1) + \frac{1}{2}(i + 1)\Big)\mod m\\
+                    &= \Big(h(k) + \frac{1}{2}(i + 1)^2 + \frac{1}{2}(i + 1)\Big)\mod m
+                \end{align*}
+                Gilt.
+            \end{proof}
+            \item 
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+    
+    \end{aufgabe}
+\end{document}

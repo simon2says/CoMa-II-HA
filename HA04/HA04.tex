@@ -1,0 +1,483 @@
+\documentclass{scrartcl} % file is in UTF-8 Encoding
+
+\usepackage[T1]{fontenc}
+
+\input{template}
+%---------------- VARS --------------%
+\newcommand{\headvorlage}{	
+	\group{24} \hfill \textbf{\semester} \\
+	\begin{tabular}{@{}l r}
+		\student{Philine Stella Bock}{507316}
+		\student{Devagya Sharma}{495395}
+		\student{Simon Seemüller}{513084}
+	\end{tabular}
+	\haloesung{04}
+}
+
+\begin{document}
+    \setcounter{auf}{0}
+	\headvorlage
+    Hallo liebe korrigierende Person, wir haben vermutlich schon ausreichend Punkte für die erste Hälfte geholt. Weil wir alle mindestens so beschäftigt sind wie ein Schwarm Bienen, halten wir also den Aufwand für diesen Übungszettel in einem Rahmen, der für uns angemessen ist. Suche keine Punkte, die die Du nicht findest, mach Dir keine Sorgen, falls du hierauf nicht so viel geben kannst. Viele Grüße, Dave, Philine und Simon. :)
+    
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item $\mathcal{S} = (v_1, v_2), (v_1, v_3), (v_2, v_3), (v_3, v_1), (v_3, v_2), (v_2, v_1)$
+            \item \begin{enumerate}[label=(\roman*)]
+                \item \label{item:1ai} Der modifizierte Algorithmus findet nach einer Iteration den kürzesten Weg von $v_1$ nach $v_{2025}$. Er findet in dieser Iteration zunächst den Weg von $v_1$ nach $v_2$, welcher der kürzeste Weg zwischen den beiden Knoten sein muss. Gäbe es einen kürzeren Weg zwischen den beiden Knoten, so gäbe es auch einen kürzeren Weg von $v_1$ nach $v_{2025}$, der diesen Weg beinhalten würde. Er findet danach den kürzesten $v_1$-$v_3$-Weg, da er die Kante $(v_2, v_3)$ überprüft. Der Weg $v_1(v_1, v_2)v_2(v_2, v_3)v_3$ muss der kürzeste $v_1$-$v_3$-Weg sein, da es sonst einen kürzeren $v_1$-$v_{2025}$-Weg geben würde. Danach findet er den kürzesten $v_1$-$v_4$-Weg in der gleichen Iteration, der die Kante $(v_3, v_4)$ beinhaltet. Dieser Weg muss induktiv mit vorheriger Argumentation der kürzeste $v_1$-$v_4$ sein. So findet er in einer einzigen Iteration den kürzesten Weg zwischen diesen Knoten.
+                \item Der modifizierte Algorithmus findet nach $1012$ Iterationen den kürzesten Weg: Während der ersten Iteration findet er beim aufsteigenden Bearbeiten der Knoten den Weg $v_1(v_1, v_{2024})v_{2024}$. Beim absteigenden Bearbeiten der Knoten findet er den Weg $v_1(v_1, v_{2024})v_{2024}(v_{2024}, v_2)v_2$. Dieser Weg ist bisher der kürzeste. Die Argumentation dafür ist die gleiche wie bei Teil \ref{item:1ai}. In der zweiten Iteration findet der Algorithmus noch die Kante $(v_2, v_{2023})$. Diese muss wieder im kürzesten $v_1$-$v_2025$-Pfad enthalten sein. Dieses kleinste Potential des Knotens $v_{2023}$ kann auch nicht in der ersten Iteration bereits entdeckt worden sein, da dort das kleinste Potential für $v_2$ noch nicht entdeckt war. Dann entdeckt er weiter die Kante $(v_{2023}, v_3)$. Auch diese Kante kann in der ersten Iteration noch nicht entdeckt worden sein, aus gleicher Argumentation wie oben. Auf diese Art entdeckt der Algorithmus in jeder Iteration exakt zwei neue Kanten. Da er insgesamt 2024 Kanten finden muss, um das kleinste Potential fuer den Knoten $v_{2025}$ zu entdecken, benoetigt er insgesamt $1012$ Iterationen.                
+            \end{enumerate}
+            \item Wir zeigen zuerst:
+                \begin{theorem*}
+                    Sei in einem optimalen $v_i$-$v_j$-Weg der Nachfolger eines Knotens $v_k$ der Knoten $v_k + 1$ und der optimale $v_i$-$v_j$-Weg $v_i, (v_i, v_i + 1), v_i + 1, (v_i + 1, v_i + 2), \ldots, v_j$. Dann findet der modifizierte Algorithmus in jeder Iteration außer der ersten und der letzten immer mindestens zwei kürzeste $v_k$-$v_k + 1$-Kanten.
+                \end{theorem*}
+                \begin{proof}
+                    Sei der aktuelle Knoten $v_k$. Nun kann $v_k + 1$ nicht ein Knoten sein, der in der Ordnung $v_1 \prec v_2 \prec \ldots \prec v_n$ vor dem Knoten $v_k$ kommt, da er sonst in der vorherigen Iteration hätte betrachtet werden müssen. So wird also die Kante $(v_k, v_k + 1)$ gefunden, während der Algorithmus die Kanten mit $i < j$ betrachtet. Der darauffolgende Knoten $v_k + 2$ kann nun entweder in der Knotenordnung vor oder nach $v_k + 1$ kommen. Kommt er danach, wird auch er betrachtet, während der Algorithmus die Kanten mit $i < j$ durchsucht. Kommt er in der Knotenordnung davor, so wird der Algorithmus ihn finden, während er die Kanten $j < i$ betrachtet. Jedenfalls findet der Algorithmus immer zwei Kanten in jeder Iteration, solange davor ein Durchlauf existierte und noch mindestens zwei Kanten übrig sind.
+                \end{proof}
+                \begin{theorem*}
+                    Wenn man in jeder Iteration die Kanten in dieser Reihenfolge betrachtet, benötigt man höchstens $\lceil \frac{n}{2} \rceil$ Iterationen des Algorithmus.
+                \end{theorem*}
+                \begin{proof}
+                    Wir machen eine Fallunterscheidung. Sei $n$ gerade. Dann gibt es eine ungerade Anzahl $n - 1$ von Kanten, die diese Knoten verbinden. Dadurch kann nach unserem vorigen Beweis nur entweder die erste oder die letzte Iteration nur einen Knoten betrachten. Die Anzahl der Durchläufe ist hier also gleich $\lceil \frac{n - 1}{2}\rceil \leq \lceil \frac{n}{2}\rceil$.
+
+                    Sei $n$ stattdessen gerade. Dann gibt es eine gerade Anzahl $n - 1$ von Kanten, die diese Knoten verbinden. Hier könnte es nach unserem vorigen Beweis sein, dass sowohl die erste als auch die letzte Iteration jeweils nur eine Kante finden. Dadurch ergeben sich $\frac{n - 2}{2} + \frac{2}{2} = \frac{n}{2} \leq \lceil \frac{n}{2}\rceil$ Iterationen, die der Algorithmus benötigt.
+                \end{proof}
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item In diesem Graphen sind alle nicht mehr im Heap enthaltenen Knoten grün umrandet. Die Vorgängerinformation wird über einen blauen Pfeil dargestellt.
+            \begin{center}
+                \begin{tikzpicture}[
+                    node distance = 4cm and 4cm,
+                    V/.style = {circle, draw={green}, very thick, fill=teal!60, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize},
+                    A/.style = {circle, draw, fill=teal!60, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize}
+                    ]
+                    \begin{scope}[nodes=V]
+                    \end{scope}
+                    \begin{scope}[nodes=A]
+                        \node[label=above:{\scriptsize$0$}] (v1) at (0,0) {$v_1$};
+                        \node[label=below:{\scriptsize$\infty$}] (v4) at (0,-2) {$v_4$};
+                        \node[label=left:{\scriptsize$\infty$}] (v2) at (-4, -2) {$v_2$};
+                        \node[label=left:{\scriptsize$\infty$}] (v3) at (-4, 2) {$v_3$};
+                        \node[label=right:{\scriptsize$\infty$}] (v5) at (4, 2) {$v_5$};
+                        \node[label=right:{\scriptsize$\infty$}] (v6) at (4, -2) {$v_6$};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, thick, NavyBlue, ->]
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, dashed, thin, gray, ->]
+                        \draw (v3) -- (v5) node[midway, above] {1};
+                        \draw (v3) -- (v2) node[midway, left] {3};
+                        \draw (v2) -- (v4) node[midway, below] {1};
+                        \draw (v1) -- (v4) node[midway, right] {8};
+                        \draw (v6) -- (v1) node[midway, above] {1};
+                        \draw (v6) -- (v5) node[midway, right] {2};
+                        \draw (v1) -- (v5) node[midway, above] {4};
+                        \draw (v3) -- (v4) node[midway, below] {5};
+                        \draw (v1) -- (v3) node[midway, above] {2};
+                    \end{scope}
+                \end{tikzpicture}
+
+                \begin{tikzpicture}[
+                    node distance = 4cm and 4cm,
+                    V/.style = {circle, draw={green}, very thick, fill=teal!60, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize},
+                    A/.style = {circle, draw, fill=teal!60, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize}
+                    ]
+                    \begin{scope}[nodes=V]
+                        \node[label=above:{\scriptsize$0$}] (v1) at (0,0) {$v_1$};
+                    \end{scope}
+                    \begin{scope}[nodes=A]
+                        \node[label=below:{\scriptsize$8$}] (v4) at (0,-2) {$v_4$};
+                        \node[label=left:{\scriptsize$\infty$}] (v2) at (-4, -2) {$v_2$};
+                        \node[label=left:{\scriptsize$2$}] (v3) at (-4, 2) {$v_3$};
+                        \node[label=right:{\scriptsize$4$}] (v5) at (4, 2) {$v_5$};
+                        \node[label=right:{\scriptsize$\infty$}] (v6) at (4, -2) {$v_6$};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, thick, NavyBlue, ->]
+                        \draw (v1) -- (v4) node[midway, right] {8};
+                        \draw (v1) -- (v5) node[midway, above] {4};
+                        \draw (v1) -- (v3) node[midway, above] {2};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, dashed, thin, gray, ->]
+                        \draw (v3) -- (v5) node[midway, above] {1};
+                        \draw (v3) -- (v2) node[midway, left] {3};
+                        \draw (v2) -- (v4) node[midway, below] {1};
+                        \draw (v6) -- (v1) node[midway, above] {1};
+                        \draw (v6) -- (v5) node[midway, right] {2};
+                        
+                        \draw (v3) -- (v4) node[midway, below] {5};
+                        
+                    \end{scope}
+                \end{tikzpicture}
+
+                \begin{tikzpicture}[
+                    node distance = 4cm and 4cm,
+                    V/.style = {circle, draw={green}, very thick, fill=teal!60, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize},
+                    A/.style = {circle, draw, fill=teal!60, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize}
+                    ]
+                    \begin{scope}[nodes=V]
+                        \node[label=above:{\scriptsize$0$}] (v1) at (0,0) {$v_1$};
+                        \node[label=left:{\scriptsize$2$}] (v3) at (-4, 2) {$v_3$};
+                    \end{scope}
+                    \begin{scope}[nodes=A]
+                        \node[label=below:{\scriptsize$7$}] (v4) at (0,-2) {$v_4$};
+                        \node[label=left:{\scriptsize$5$}] (v2) at (-4, -2) {$v_2$};
+                        \node[label=right:{\scriptsize$3$}] (v5) at (4, 2) {$v_5$};
+                        \node[label=right:{\scriptsize$\infty$}] (v6) at (4, -2) {$v_6$};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, thick, NavyBlue, ->]
+                        \draw (v1) -- (v3) node[midway, above] {2};
+                        \draw (v3) -- (v5) node[midway, above] {1};
+                        \draw (v3) -- (v2) node[midway, left] {3};
+                        \draw (v3) -- (v4) node[midway, below] {5};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, dashed, thin, gray, ->]
+                        \draw (v1) -- (v5) node[midway, above] {4};
+                        \draw (v1) -- (v4) node[midway, right] {8};
+                        \draw (v2) -- (v4) node[midway, below] {1};
+                        \draw (v6) -- (v1) node[midway, above] {1};
+                        \draw (v6) -- (v5) node[midway, right] {2};
+                    \end{scope}
+                \end{tikzpicture}
+
+                \begin{tikzpicture}[
+                    node distance = 4cm and 4cm,
+                    V/.style = {circle, draw={green}, very thick, fill=teal!60, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize},
+                    A/.style = {circle, draw, fill=teal!60, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize}
+                    ]
+                    \begin{scope}[nodes=V]
+                        \node[label=above:{\scriptsize$0$}] (v1) at (0,0) {$v_1$};
+                        \node[label=left:{\scriptsize$2$}] (v3) at (-4, 2) {$v_3$};
+                        \node[label=right:{\scriptsize$3$}] (v5) at (4, 2) {$v_5$};
+                    \end{scope}
+                    \begin{scope}[nodes=A]
+                        \node[label=below:{\scriptsize$7$}] (v4) at (0,-2) {$v_4$};
+                        \node[label=left:{\scriptsize$5$}] (v2) at (-4, -2) {$v_2$};
+                        \node[label=right:{\scriptsize$\infty$}] (v6) at (4, -2) {$v_6$};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, thick, NavyBlue, ->]
+                        \draw (v1) -- (v3) node[midway, above] {2};
+                        \draw (v3) -- (v5) node[midway, above] {1};
+                        \draw (v3) -- (v2) node[midway, left] {3};
+                        \draw (v3) -- (v4) node[midway, below] {5};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, dashed, thin, gray, ->]
+                        \draw (v1) -- (v5) node[midway, above] {4};
+                        \draw (v1) -- (v4) node[midway, right] {8};
+                        \draw (v2) -- (v4) node[midway, below] {1};
+                        \draw (v6) -- (v1) node[midway, above] {1};
+                        \draw (v6) -- (v5) node[midway, right] {2};
+                    \end{scope}
+                \end{tikzpicture}
+
+                \begin{tikzpicture}[
+                    node distance = 4cm and 4cm,
+                    V/.style = {circle, draw={green}, very thick, fill=teal!60, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize},
+                    A/.style = {circle, draw, fill=teal!60, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize}
+                    ]
+                    \begin{scope}[nodes=V]
+                        \node[label=above:{\scriptsize$0$}] (v1) at (0,0) {$v_1$};
+                        \node[label=left:{\scriptsize$2$}] (v3) at (-4, 2) {$v_3$};
+                        \node[label=right:{\scriptsize$3$}] (v5) at (4, 2) {$v_5$};
+                        \node[label=left:{\scriptsize$5$}] (v2) at (-4, -2) {$v_2$};
+                    \end{scope}
+                    \begin{scope}[nodes=A]
+                        \node[label=below:{\scriptsize$6$}] (v4) at (0,-2) {$v_4$};
+                        \node[label=right:{\scriptsize$\infty$}] (v6) at (4, -2) {$v_6$};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, thick, NavyBlue, ->]
+                        \draw (v1) -- (v3) node[midway, above] {2};
+                        \draw (v3) -- (v5) node[midway, above] {1};
+                        \draw (v3) -- (v2) node[midway, left] {3};
+                        \draw (v2) -- (v4) node[midway, below] {1};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, dashed, thin, gray, ->]
+                        \draw (v1) -- (v5) node[midway, above] {4};
+                        \draw (v1) -- (v4) node[midway, right] {8};
+                        \draw (v6) -- (v1) node[midway, above] {1};
+                        \draw (v6) -- (v5) node[midway, right] {2};
+                        \draw (v3) -- (v4) node[midway, below] {5};
+                    \end{scope}
+                \end{tikzpicture}
+
+                \begin{tikzpicture}[
+                    node distance = 4cm and 4cm,
+                    V/.style = {circle, draw={green}, very thick, fill=teal!60, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize},
+                    A/.style = {circle, draw, fill=teal!60, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize}
+                    ]
+                    \begin{scope}[nodes=V]
+                        \node[label=above:{\scriptsize$0$}] (v1) at (0,0) {$v_1$};
+                        \node[label=left:{\scriptsize$2$}] (v3) at (-4, 2) {$v_3$};
+                        \node[label=right:{\scriptsize$3$}] (v5) at (4, 2) {$v_5$};
+                        \node[label=left:{\scriptsize$5$}] (v2) at (-4, -2) {$v_2$};
+                        \node[label=below:{\scriptsize$6$}] (v4) at (0,-2) {$v_4$};
+                    \end{scope}
+                    \begin{scope}[nodes=A]
+                        \node[label=right:{\scriptsize$\infty$}] (v6) at (4, -2) {$v_6$};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, thick, NavyBlue, ->]
+                        \draw (v1) -- (v3) node[midway, above] {2};
+                        \draw (v3) -- (v5) node[midway, above] {1};
+                        \draw (v3) -- (v2) node[midway, left] {3};
+                        \draw (v2) -- (v4) node[midway, below] {1};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, dashed, thin, gray, ->]
+                        \draw (v1) -- (v5) node[midway, above] {4};
+                        \draw (v1) -- (v4) node[midway, right] {8};
+                        \draw (v6) -- (v1) node[midway, above] {1};
+                        \draw (v6) -- (v5) node[midway, right] {2};
+                        \draw (v3) -- (v4) node[midway, below] {5};
+                    \end{scope}
+                \end{tikzpicture}
+
+                \begin{tikzpicture}[
+                    node distance = 4cm and 4cm,
+                    V/.style = {circle, draw={green}, very thick, fill=teal!60, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize},
+                    A/.style = {circle, draw, fill=teal!60, inner sep = 4pt, font=\small},
+                    every edge quotes/.style = {auto, font=\footnotesize}
+                    ]
+                    \begin{scope}[nodes=V]
+                        \node[label=above:{\scriptsize$0$}] (v1) at (0,0) {$v_1$};
+                        \node[label=left:{\scriptsize$2$}] (v3) at (-4, 2) {$v_3$};
+                        \node[label=right:{\scriptsize$3$}] (v5) at (4, 2) {$v_5$};
+                        \node[label=left:{\scriptsize$5$}] (v2) at (-4, -2) {$v_2$};
+                        \node[label=below:{\scriptsize$6$}] (v4) at (0,-2) {$v_4$};
+                        \node[label=right:{\scriptsize$\infty$}] (v6) at (4, -2) {$v_6$};
+                    \end{scope}
+                    \begin{scope}[nodes=A]
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, thick, NavyBlue, ->]
+                        \draw (v1) -- (v3) node[midway, above] {2};
+                        \draw (v3) -- (v5) node[midway, above] {1};
+                        \draw (v3) -- (v2) node[midway, left] {3};
+                        \draw (v2) -- (v4) node[midway, below] {1};
+                    \end{scope}
+                    \begin{scope}[every edge/.style=draw, dashed, thin, gray, ->]
+                        \draw (v1) -- (v5) node[midway, above] {4};
+                        \draw (v1) -- (v4) node[midway, right] {8};
+                        \draw (v6) -- (v1) node[midway, above] {1};
+                        \draw (v6) -- (v5) node[midway, right] {2};
+                        \draw (v3) -- (v4) node[midway, below] {5};
+                    \end{scope}
+                \end{tikzpicture}
+            \end{center}
+            Damit sind alle kürzesten $v_1$-$v_i$-Pfade für $i = 2, \ldots, 6$ gefunden.
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \renewcommand{\arraystretch}{1.5}
+            \item Wir stellen die Listen so dar. An erster Stelle steht hierbei immer der Repräsentant dieser Liste.
+                \begin{center}
+                    \begin{tabular}{|>{\columncolor{teal!60}}m{1cm}|m{1cm}|}
+                    \hline
+                         1 & 1\\\hline 
+                         2 & 2\\\hline 
+                         3 & 3\\\hline 
+                         4 & 4\\\hline 
+                         5 & 5\\\hline 
+                         6 & 6\\\hline 
+                    \end{tabular}
+                \end{center}
+                Nach dem Hinzufügen von Kante $\{1, 3\}$:
+                \begin{center}
+                    \begin{tabular}{|>{\columncolor{teal!60}}m{1cm}|m{1cm}|m{1cm}|}
+                    \hline
+                         1 & 1 & 3\\\hline 
+                         2 & 2 &\\\hline 
+                         4 & 4 &\\\hline 
+                         5 & 5 &\\\hline 
+                         6 & 6 &\\\hline 
+                    \end{tabular}
+                \end{center}
+                Nach dem Hinzufügen von Kante $\{4, 6\}$:
+                \begin{center}
+                    \begin{tabular}{|>{\columncolor{teal!60}}m{1cm}|m{1cm}|m{1cm}|}
+                    \hline
+                         1 & 1 & 3\\\hline 
+                         2 & 2 & \\\hline 
+                         4 & 4 & 6\\\hline 
+                         5 & 5 &\\\hline  
+                    \end{tabular}
+                \end{center}
+                Nach dem Hinzufügen von Kante $\{4, 5\}$:
+                \begin{center}
+                    \begin{tabular}{|>{\columncolor{teal!60}}m{1cm}|m{1cm}|m{1cm}|m{1cm}|}
+                    \hline
+                         1 & 1 & 3 &\\\hline 
+                         2 & 2 & &\\\hline 
+                         4 & 4 & 6 & 5\\\hline 
+                    \end{tabular}
+                \end{center}
+                Nach dem Hinzufügen von Kante $\{2, 4\}$:
+                \begin{center}
+                    \begin{tabular}{|>{\columncolor{teal!60}}m{1cm}|m{1cm}|m{1cm}|m{1cm}|m{1cm}|}
+                    \hline
+                         1 & 1 & 3 & &\\\hline  
+                         4 & 4 & 6 & 5 & 2\\\hline 
+                    \end{tabular}
+                \end{center}
+                Nach dem Hinzufügen von Kante $\{1, 6\}$:
+                \begin{center}
+                    \begin{tabular}{|>{\columncolor{teal!60}}m{1cm}|m{1cm}|m{1cm}|m{1cm}|m{1cm}|m{1cm}|m{1cm}|}
+                    \hline
+                         4 & 4 & 6 & 5 & 2 & 1 & 3\\\hline 
+                    \end{tabular}
+                \end{center}
+                Damit findet der Algorithmus keine weiteren Kanten, die er zum MST hinzufügen könnte, sodass die beiden Enden der Kanten in unterschiedlichen Union-Sets sind, und terminiert, nachdem er alle Kanten geprüft hat.
+            \item ~
+            Zu Beginn:
+            \begin{center}
+                \begin{forest}
+                for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                [1]
+                \end{forest}\qquad
+                \begin{forest}
+                for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                [2]
+                \end{forest}\qquad
+                \begin{forest}
+                for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                [3]
+                \end{forest}\qquad
+                \begin{forest}
+                for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                [4]
+                \end{forest}\qquad
+                \begin{forest}
+                for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                [5]
+                \end{forest}\qquad
+                \begin{forest}
+                for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                [6]
+                \end{forest}
+            \end{center}
+            Nach der ersten Iteration:
+            \begin{center}
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [1[3]]
+                    \end{forest}
+                \end{adjustbox}\qquad
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [2]
+                    \end{forest}
+                \end{adjustbox}\qquad
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [4]
+                    \end{forest}
+                \end{adjustbox}\qquad
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [5]
+                    \end{forest}
+                \end{adjustbox}\qquad
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [6]
+                    \end{forest}
+                \end{adjustbox}
+            \end{center}
+            Nach der zweiten Iteration:
+            \begin{center}
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [1[3]]
+                    \end{forest}
+                \end{adjustbox}\qquad
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [2]
+                    \end{forest}
+                \end{adjustbox}\qquad
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [4[6]]
+                    \end{forest}
+                \end{adjustbox}\qquad
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [5]
+                    \end{forest}
+                \end{adjustbox}
+            \end{center}
+            Nach der dritten Iteration:
+            \begin{center}
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [1 [3] [4 [6]]]
+                    \end{forest}
+                \end{adjustbox}\qquad
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [2]
+                    \end{forest}
+                \end{adjustbox}\qquad
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [5]
+                    \end{forest}
+                \end{adjustbox}
+            \end{center}
+            Nach der vierten Iteration:
+            \begin{center}
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [1 [3] [4 [6]] [2]]
+                    \end{forest}
+                \end{adjustbox}\qquad
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [5]
+                    \end{forest}
+                \end{adjustbox}
+            \end{center}
+            Nach der fuenften Iteration:
+            \begin{center}
+                \begin{adjustbox}{valign=t}
+                    \begin{forest}
+                    for tree={draw, circle, minimum size=6ex, edge={<-}, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [1 
+                        [3] 
+                        [4 
+                            [6]] 
+                        [2] 
+                        [5]]
+                    \end{forest}
+                \end{adjustbox}\qquad
+            \end{center}
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        What if the real Aufgabe was the friends we made along the way?
+    \end{aufgabe}
+\end{document}

@@ -1,0 +1,170 @@
+\documentclass{scrartcl} % file is in UTF-8 Encoding
+
+\usepackage[T1]{fontenc}
+
+\input{template}
+%---------------- VARS --------------%
+\newcommand{\headvorlage}{	
+	\group{24} \hfill \textbf{\semester} \\
+	\begin{tabular}{@{}l r}
+		\student{Philine Stella Bock}{507316}
+		\student{Devagya Sharma}{495395}
+		\student{Simon Seemüller}{513084}
+	\end{tabular}
+	\haloesung{01}
+}
+
+\begin{document}
+	\setcounter{auf}{0}
+	\headvorlage
+    \begin{aufgabe}
+        Unsere Implementation der Queue sieht aus wie folgt:
+        \lstinputlisting[language=Julia, caption={Implementation einer Queue mit zwei Stacks}]{jl/A01.jl}
+        
+        Für die {\ttfamily queue\_insert}-Operation gibt es in jedem Fall genau eine {\ttfamily insert}-Operation des Stacks. 
+        
+        Bei der {\ttfamily queue\_pop}-Operation, falls der {\ttfamily inputstack} $n$ Elemente beinhaltet, so kann es bis zu $n$ {\ttfamily pop}- und $n$ {\ttfamily insert}-Operationen vom {\ttfamily inputstack} auf den {\ttfamily outputstack} geben. Am Ende gibt es in diesem Falle noch eine weitere {\ttfamily pop}-Operation des {\ttfamily outputstacks}.
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item Die Funktion {\ttfamily DeleteNext(L, x)} funktioniert nicht korrekt. Da es sein kann, dass {\ttfamily x.next} das letzte Element in der Liste ist, hat dieses manchmal kein Folgeelement und somit gibt der Funktionsaufruf in diesem Fall einen Fehler zurück.
+            \item \lstinputlisting[language=Julia, firstline=3, lastline=8, caption={Lösche das nächste Element eines Elements aus einer modifizierten CoMa-Liste}]{jl/A02.jl}
+            Die Funktion ist korrekt. Ein Element kann dann kein übernächstes Element haben, falls es selbst oder ihr Nachfolger {\ttfamily y} ist. In diesen Fällen macht die Funktion nichts und löscht keinen Eintrag. Sonst setzt die Funktion immer den Nachfolger des gewählten Eintrags auf den übernächsten Eintrag.
+            \item \lstinputlisting[language=Julia, firstline=12, lastline=16, caption={Füge ein Element in eine modifizierte CoMa-Liste ein}]{jl/A02.jl}~\\[-3em]
+            \item \lstinputlisting[language=Julia, firstline=20, lastline=22, caption={[upper/lower text]%
+               \begin{tabular}[t]{@{}l@{}}
+                 Lösche das nächste Element eines Elements aus einer Jordan-modifizierten\\
+                 CoMa-Liste
+               \end{tabular}}]{jl/A02.jl}
+            Die Funktion ist korrekt. Falls es sich hierbei um {\ttfamily y} handelt, wollen wir die Liste nicht verändern. Das geschieht, da {\ttfamily y.next = y.next.next = w.next = w} passiert -- eine intendierte Funktionsweise. Falls es sich um den Eintrag vor {\ttfamily y} handelt, wird {\ttfamily y.prev.next = y.prev.next.next = y.next = w} gerechnet, also wird {\ttfamily y} gelöscht, was auch intendierte Funktionsweise ist.
+            \item \lstinputlisting[language=Julia, firstline=26, lastline=32, caption={Die Liste nach dem Erscheinen eines Wertes $d$ abschneiden}]{jl/A02.jl}
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item \begin{theorem}
+                Für alle $n \geq 1$ gilt
+                \[
+                    2 \cdot \sum_{k = 0}^{n - 1}3^k = 3^n - 1                
+                \]
+            \end{theorem}
+            \begin{proof}[Beweis durch vollständige Induktion]\label{proof:3i}
+                Induktionsanfang $(n = 1)$:
+                \begin{align*}
+                    2\cdot \sum_{k = 0}^{1 - 1}3^k &= 3^1 - 1\\
+                    2\cdot 3^0 &= 2\\
+                    2 &= 2
+                \end{align*}
+%                Alternative:
+%                \begin{align*}
+%                    2 \cdot \sum_{k=0}^{1-1}3^k = 2 \cdot 3^0 = 2 \cdot 1 = 2 = 3^1-1 = 3^n -1
+%                \end{align*}
+                Stimmt.
+
+                Induktionsvoraussetzung: Für ein beliebiges, aber festes $n \geq 1$ gelte:
+                \[
+                    2 \cdot \sum_{k = 0}^{n - 1}3^k = 3^n - 1
+                \]
+                Induktionsschritt: $(n \to n + 1)$:
+                Es soll gelten:
+                \begin{align*}
+                    2 \cdot \sum_{k = 0}^{n + 1 - 1}3^k &\stackrel{!}{=} 3^{n + 1} - 1
+                    \intertext{Wir vereinfachen:}
+                    2 \cdot \sum_{k = 0}^{n + 1 - 1}3^k &= 2 \cdot \sum_{k = 0}^n 3^k\\
+                    &= 2 \cdot \sum_{k = 0}^{n - 1}3^k + 2\cdot 3^n\\
+                    &\stackrel{IV}{=}3^n - 1 + 2\cdot 3^n\\
+                    &= 3^n \cdot (1 + 2) - 1\\
+                    &= 3^n \cdot 3 - 1\\
+                    &= 3^{n + 1} - 1
+                \end{align*}
+                Ist wahr.
+%                Alternative:
+%                \begin{align*}
+%                    2 \cdot \sum_{k=0}^{n+1-1}3^k = 2 \cdot \sum_{k=0}^n 3^k = 2 \cdot \sum_{k=0}^{n-1} 3^k + 2 \cdot 3^n \\
+%                    \overset{IV}{\Leftrightarrow} 3^n -1 + 2 \cdot 3^n = 3^n (1 + 2)-1 = 3^n (3) -1 = 3^{n+1} -1
+%                \end{align*}
+%                Ist wahr.
+            \end{proof}
+            \item \lstinputlisting[language=Julia, caption={Berechnung der $n$-ten Catalan-Zahl}]{jl/A03.jl}
+            Wir nehmen an, das ein $n \in \N$ existiert, sodass für alle $j \in \N$ mit $0\leq k \leq n$ gilt, dass die Laufzeit in $\Theta(3^n)$. Dann zeigen wir per Induktion, dass dies stets gilt. Da der Algorithmus in der {\ttfamily for}-Schleife die n-te Catalanzahl korrekt berechnet, zeigen wir, dass für 
+            \begin{align*}
+                C_n:=\sum_{k=0}^{n-1}C_k \cdot C_{n-1-k}
+            \end{align*} die Laufzeit $\Theta(3^n)$ erfüllt ist.
+            Induktionsanfang: Für $n=0$ gilt: 
+            \begin{lstlisting}[language=Julia]
+    if n == 0
+        return 1
+    end \end{lstlisting}
+            Der Code ruft lediglich die {\ttfamily if}-Abfrage auf. Das heißt, die {\ttfamily for}-Schleife wird gar nicht durchlaufen. Damit gilt für die Laufzeit, dass $\Theta(1)$ gilt und somit auch $\Theta(1) = \Theta (3^0)$. Somit ist der Code für den Fall $n=0$ in Laufzeit $\Theta(3^n)$ und korrekt.
+            
+            Induktionsvoraussetzung: Es gelte, dass der Code für ein festes, aber beliebiges $j \in \N: 0 \leq j \leq n$ in $\Theta(3^j)$ ist.
+            
+            Induktionsschluss: Dann gilt für $n+1$, dass für jedes $n \in \N$ die for- Schleife zur Berechnung der n-ten Catalanzahl aufgerufen wird, da $n+1 \neq 0$ gilt. In der for-Schleife wird die n-te Catalanzahl gemäß der rekursiven Formel berechnet. Daher gilt:
+            \[
+                C_{n+1}:=\sum_{k=0}^{n+1-1}C_k \cdot C_{n+1-1-k}= \sum_{k=0}^{n}C_k \cdot C_{n-k}.
+            \] 
+            Daraus ergibt sich, dass zur Berechnung der Catalanzahl für $C_k$ und $C_{n-k}$ jeweils k verschiedene Zahlen miteinander multipliziert werden, die nach der Induktionsvoraussetzung jeweils Laufzeit von $3^k$ haben. Mit \ref{proof:3i} gilt somit, dass für $n+1$ gilt: 
+            \[
+                2 \cdot \sum_{k=0}^n 3^k
+            \]
+            da es sich um zwei dieser Zahlen handelt, für die das gilt. Daher folgt nach dem Beweis in \ref{proof:3i}, dass 
+            \[
+                2 \cdot \sum_{k=0}^n 3^k = 3^{n+1} -1 \leq 3^{n+1},
+            \] 
+            wodurch die Gesamtlaufzeit in unserem Code innerhalb von $\Theta (3^n+1)$ ist. Somit ist auch der Induktionsschluss bewiesen, sodass unser Code über eine Laufzeit von $\Theta(3^n)$ für ein beliebiges aber festes $n \in \N$ verfügt.
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item Ein Standard-Young-Schema mit diesen Einträgen könnte aussehen wie folgt:
+            \[
+                \begin{pmatrix}
+                    1 & 3 & 4 & 5\\
+                    8 & 10 & 12 & 14\\
+                    21 & \infty & \infty & \infty \\
+                    \infty & \infty & \infty & \infty
+                \end{pmatrix}
+            \]
+            \item Unser Algorithmus arbeitet wie folgt: Wir löschen zuerst das betroffene Feld. Danach sehen wir immer nach dem kleineren Eintrag entweder unten oder rechts, tauschen diesen mit dem aktuellen Eintrag und wandern dann in das Feld, das wir eben geleert haben. Falls wir ganz rechts in der Matrix sind, tauschen und wandern wir nur noch nach unten, falls wir ganz unten sind, tauschen und wandern wir nur noch nach rechts.
+            \lstinputlisting[firstline=3, lastline=27, language=Julia, caption={Das Minimum aus einem Standard-Young-Schema löschen}]{jl/A04.jl}
+            \begin{theorem*}
+                Der Algorithmus arbeitet korrekt.
+            \end{theorem*}
+            \begin{proof}
+                Wir tauschen in jeder Iteration der {\ttfamily while}-Schleife einen Eintrag nach links oder oben mit dem Eintrag, der geleert wurde. Wir nennen die neue Position des alten Eintrages $[i{'}, j{'}]$, wobei entweder $i{'} = i, j{'} = j - 1$ oder $i{'} = i - 1, j{'} = j$ sein müssen. Wir bedenken, dass die Matrix vor Verschieben des Eintrages geordnet war. Dann muss gelten:
+                \[
+                    \texttt{mat}[i' - 1, j'] < \texttt{mat}[i', j'] \text{ und } \texttt{mat}[i', j' - 1] < \texttt{mat}[i', j'].
+                \]
+                Nun können wir beide Fälle von oben unterschieden. Seien $(i', j') = (i, j - 1)$. Dann soll gelten:
+                \[
+                    \texttt{mat}[i - 1, j - 1] < \texttt{mat}[i, j - 1] \text{ und } \texttt{mat}[i, j - 2] < \texttt{mat}[i, j - 1].
+                \]
+                Diese beiden Ungleichungen gelten offensichtlich aufgrund der vorher bestehenden Ordnung, und ebenso für das Paar $(i', j' = i - 1, j)$. Es muss jedoch auch gelten, dass der Eintrag kleiner sein soll als unter und rechts von der Stelle, an die wir ihn schieben. Er ist ohnehin kleiner als der Eintrag, mit dem wir tauschen, da dieser $\infty$ sein wird. Er ist jedoch auch kleiner als der andere größere adjazente Eintrag, da wir der {\ttfamily if}-Abfrage sonst mit diesem Eintrag getauscht hätten.                
+            \end{proof}
+            \begin{theorem*}
+                Der Algorithmus hat Laufzeit in $\Theta(n + m)$.
+            \end{theorem*}
+            \begin{proof}\label{proof:4b}
+                Die drei {\ttfamily while}-Schleifen sind die einzigen Schleifen innerhalb des Programms. Die erste {\ttfamily while}-Schleife vergrößert jeden Eintrag entweder die aktuelle {\ttfamily x}- oder die aktuelle {\ttfamily y}-Position um $1$. Diese Positionen sind gleichzeitig die Abbruchbedigungen -- sobald wir an den Rand der Matrix kommen, können wir in dieser Richtung nicht weiterarbeiten. Die einzelnen Schleifendurchläufe passieren in Linearzeit. Daher kann die erste {\ttfamily while}-Schleife höchstens $n + m$ Durchläufe machen.
+
+                Die zweite {\ttfamily while}-Schleife erhöht jeden Schleifendurchlauf ihre {\ttfamily y}-Position. Diese ist auch hier wieder Abbruchbedigung und kann höchstens $m$ Durchläufe machen. Die einzelnen Schleifenaufrufe geschehen wieder in Linearzeit. Exakt äquivalent verhält es sich mit der dritten {\ttfamily while}-Schleife, mit höchstens $n$ Durchläufen.
+
+                Da es also Schleifenaufrufe in $\BigO(n + m)$ gibt und diese in Linearzeit passieren, liegt die Laufzeit des Algorithmus in $\BigO(n + m)$.
+            \end{proof}
+            \item Unser Algorithmus arbeitet wie folgt: Zunächst fügen wir das Item an der letzten Stelle in der Matrix ein. Diese muss nach den Kriterien leer sein. Dann tauschen wir das Item immer mit der aktuell größeren Stelle entweder links von oder über dem Item so lange, bis das Item größer ist als diese beiden Einträge. 
+            \lstinputlisting[firstline=81, lastline=102, language=Julia, caption={Ein Element in ein Standard-Young-Schema einfügen}]{jl/A04.jl}
+        \end{enumerate}
+        \begin{theorem*}
+            Der Algorithmus ist korrekt.
+        \end{theorem*}
+        \begin{proof}
+            Der Beweis funktioniert äquivalent zu dem Beweis in \ref{proof:4b}. Wir stellen fest, dass die Einträge, die wir nach dem Tauschen in größere Felder schieben, aufgrund der alten Ordnung kleiner sein müssen als die Einträge, die auf noch größeren Feldern stehen, und dass sie größseren sein müssen als der Eintrag insbesondere, der auf dem Feld steht, das wir nicht getauscht haben, da wir sonst diesen getauscht hätten.
+        \end{proof}
+        \begin{theorem*}
+            Der Algorithmus hat Laufzeit in $\Theta(n + m)$.
+        \end{theorem*}
+        \begin{proof}
+            Die drei {\ttfamily while}-Schleifen sind die einzigen Schleifen innerhalb des Programms. Es wird in jeder Iteration einer der Schleifen entweder die aktuelle {\ttfamily x}- oder die aktuelle {\ttfamily y}-Position um 1 verringert. Daher kann der Algorithmus höchstens $m + n$ Durchläufe der Schleifen haben. Jeder einzelne Schleifenaufruf geschieht in Linearzeit. Daher ist die Laufzeit des Algorithmus in $\Theta(n + m)$.
+        \end{proof}
+    \end{aufgabe}
+\end{document}

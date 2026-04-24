@@ -1,0 +1,535 @@
+\documentclass{scrartcl} % file is in UTF-8 Encoding
+
+\usepackage[T1]{fontenc}
+
+\input{template}
+%---------------- VARS --------------%
+\newcommand{\headvorlage}{	
+	\group{24} \hfill \textbf{\semester} \\
+	\begin{tabular}{@{}l r}
+		\student{Philine Stella Bock}{507316}
+		\student{Devagya Sharma}{495395}
+		\student{Simon Seemüller}{513084}
+	\end{tabular}
+	\haloesung{08}
+}
+
+\forestset{default preamble={
+for tree={draw, circle, minimum size=3ex, fill=teal!60, inner sep = 5pt, s sep=7mm}}}
+% äüöß
+\begin{document}
+	\headvorlage 
+    \begin{aufgabe}
+        \begin{enumerate}[label={(\alph*)}]
+            \item Wir fügen immer den Schlüssel ein, der die höchste Aufrufshäufigkeit von allen Schlüsseln, die noch nicht im Baum enthalten sind, hat.
+            \begin{center}
+                Nach Einfügen von $6$:
+                
+                \begin{forest}
+                    [6
+                        [3, phantom
+                            [2, phantom
+                                [1, phantom]
+                                [X, phantom]]
+                            [5, phantom
+                                [4, phantom]
+                                [X, phantom]]
+                        ]
+                        [X, phantom
+                            [X, phantom
+                                [X, phantom]
+                                [X, phantom]
+                            ]
+                            [X, phantom
+                                [X, phantom]
+                                [X, phantom]
+                            ]
+                        ]
+                    ]
+                \end{forest}
+
+                Nach Einfügen von $3$:
+                
+                \begin{forest}
+                    [6
+                        [3
+                            [2, phantom
+                                [1, phantom]
+                                [X, phantom]]
+                            [5, phantom
+                                [4, phantom]
+                                [X, phantom]]
+                        ]
+                        [X, phantom
+                            [X, phantom
+                                [X, phantom]
+                                [X, phantom]
+                            ]
+                            [X, phantom
+                                [X, phantom]
+                                [X, phantom]
+                            ]
+                        ]
+                    ]
+                \end{forest}
+
+                Nach Einfügen von $5$:
+                
+                \begin{forest}
+                    [6
+                        [3
+                            [2, phantom
+                                [1, phantom]
+                                [X, phantom]]
+                            [5
+                                [4, phantom]
+                                [X, phantom]]
+                        ]
+                        [X, phantom
+                            [X, phantom
+                                [X, phantom]
+                                [X, phantom]
+                            ]
+                            [X, phantom
+                                [X, phantom]
+                                [X, phantom]
+                            ]
+                        ]
+                    ]
+                \end{forest}
+
+                Nach Einfügen von $2$:
+
+                \begin{forest}
+                    [6
+                        [3
+                            [2
+                                [1, phantom]
+                                [X, phantom]]
+                            [5
+                                [4, phantom]
+                                [X, phantom]]
+                        ]
+                        [X, phantom
+                            [X, phantom
+                                [X, phantom]
+                                [X, phantom]
+                            ]
+                            [X, phantom
+                                [X, phantom]
+                                [X, phantom]
+                            ]
+                        ]
+                    ]
+                \end{forest}
+
+                Nach Einfügen von $4$:
+
+                \begin{forest}
+                    [6
+                        [3
+                            [2
+                                [1, phantom]
+                                [X, phantom]]
+                            [5
+                                [4]
+                                [X, phantom]]
+                        ]
+                        [X, phantom
+                            [X, phantom
+                                [X, phantom]
+                                [X, phantom]
+                            ]
+                            [X, phantom
+                                [X, phantom]
+                                [X, phantom]
+                            ]
+                        ]
+                    ]
+                \end{forest}
+
+                Nach Einfügen von $1$:
+
+                \begin{forest}
+                    [6
+                        [3
+                            [2
+                                [1]
+                                [X, phantom]]
+                            [5
+                                [4]
+                                [X, phantom]]
+                        ]
+                        [X, phantom
+                            [X, phantom
+                                [X, phantom]
+                                [X, phantom]
+                            ]
+                            [X, phantom
+                                [X, phantom]
+                                [X, phantom]
+                            ]
+                        ]
+                    ]
+                \end{forest}
+            \end{center}
+            Dieser Baum hat eine gesamte Zugriffszeit von
+            \[
+                C(T) = 1\cdot 20 + 2\cdot 13 + 3\cdot (12 + 9) + 4\cdot (7 + 5) = 157
+            \]
+            \item Wir zeigen den gesamten Algorithmus:
+            $j - i = 0$:
+            \[
+                \copt{0, 0} = \copt{1, 1} = \copt{2, 2} = \copt{3, 3} = \copt{4, 4} = \copt{5, 5} = \copt{6, 6} = 0
+            \]
+            $j - i = 1$:
+            \begin{align*}
+                \copt{0, 1} &= w_{0, 1} + \copt{0, 0} + \copt{1, 1} = w_{0, 1} = \beta_1 = 5\\
+                \copt{1, 2} &= w_{1, 2} + \copt{1, 1} + \copt{2, 2} = w_{1, 2} = \beta_2 = 9\\
+                \copt{2, 3} &= w_{2, 3} + \copt{2, 2} + \copt{3, 3} = w_{2, 3} = \beta_3 = 13\\
+                \copt{3, 4} &= w_{3, 4} + \copt{3, 3} + \copt{4, 4} = w_{3, 4} = \beta_4 = 7\\
+                \copt{4, 5} &= w_{4, 5} + \copt{4, 4} + \copt{5, 5} = w_{4, 5} = \beta_5 = 12\\
+                \copt{5, 6} &= w_{5, 6} + \copt{5, 5} + \copt{6, 6} = w_{5, 6} = \beta_6 = 20
+                \intertext{$j - i = 2$:}
+                \copt{0, 2} &= w_{0, 2} + \min_{k \in \{1, 2\}} (\copt{0, k - 1} + \copt{k, 2}) = 14 + \min(9, 5) = 19\\
+                \copt{1, 3} &= w_{1, 3} + \min_{k \in \{2, 3\}} (\copt{1, k - 1} + \copt{k, 3}) = 22 + \min(13, 9) = 31\\
+                \copt{2, 4} &= w_{2, 4} + \min_{k \in \{3, 4\}} (\copt{2, k - 1} + \copt{k, 4}) = 20 + \min(7, 13) = 27\\
+                \copt{3, 5} &= w_{3, 5} + \min_{k \in \{4, 5\}} (\copt{3, k - 1} + \copt{k, 5}) = 19 + \min(12, 7) = 26\\
+                \copt{4, 6} &= w_{4, 6} + \min_{k \in \{5, 6\}} (\copt{4, k - 1} + \copt{k, 6}) = 32 + \min(20, 12) = 44
+                \intertext{$j - i = 3$:}
+                \copt{0, 3} &= w_{0, 3} + \min_{k \in \{1, 2, 3\}} (\copt{0, k - 1} + \copt{k, 3}) = 27 + \min(31, 18, 19) = 45\\
+                \copt{1, 4} &= w_{1, 4} + \min_{k \in \{2, 3, 4\}} (\copt{1, k - 1} + \copt{k, 4}) = 29 + \min(27, 16, 31) = 45\\
+                \copt{2, 5} &= w_{2, 5} + \min_{k \in \{3, 4, 5\}} (\copt{2, k - 1} + \copt{k, 5}) = 32 + \min(26, 25, 27) = 57\\
+                \copt{3, 6} &= w_{3, 6} + \min_{k \in \{4, 5, 6\}} (\copt{3, k - 1} + \copt{k, 6}) = 39 + \min(44, 27, 26) = 65
+                \intertext{$j - i = 4$:}
+                \copt{0, 4} &= w_{0, 4} + \min_{k \in \{1, 2, 3, 4\}} (\copt{0, k - 1} + \copt{k, 4}) = 34 + \min(45, 32, 26, 45) = 60\\
+                \copt{1, 5} &= w_{1, 5} + \min_{k \in \{2, 3, 4, 5\}} (\copt{1, k - 1} + \copt{k, 5}) = 41 + \min(57, 35, 43, 45) = 76\\
+                \copt{2, 6} &= w_{2, 6} + \min_{k \in \{3, 4, 5, 6\}} (\copt{2, k - 1} + \copt{k, 6}) = 52 + \min(65, 57, 47, 57) = 99
+                \intertext{$j - i = 5$:}
+                \copt{0, 5} &= w_{0, 5} + \min_{k \in \{1, 2, 3, 4, 5\}} (\copt{0, k - 1} + \copt{k, 5}) = 46 + \min(76, 62, 45, 57, 60) = 91\\
+                \copt{1, 6} &= w_{1, 6} + \min_{k \in \{2, 3, 4, 5, 6\}} (\copt{1, k - 1} + \copt{k, 6}) = 61 + \min(99, 74, 75, 65, 76) = 126
+                \intertext{$j - i = 6$:}
+                \copt{0, 6} &= w_{0, 6} + \min_{k \in \{1, 2, 3, 4, 5, 6\}} (\copt{0, k - 1} + \copt{k, 6}) = 66 + \min(126, 104, 84, 89, 80, 91) = 146
+            \end{align*}
+            Die optimalen statischen Suchbäume, geordnet nach $j -i$, enthaltend die entsprechenden Schlüssel, sind also:
+    
+            $j - i = 2$:
+            \begin{center}
+                \begin{forest}
+                    [2
+                        [1]
+                        [3, phantom]]
+                \end{forest}\qquad
+                \begin{forest}
+                    [3
+                        [2]
+                        [4, phantom]]
+                \end{forest}\qquad
+                \begin{forest}
+                    [3
+                        [2, phantom]
+                        [4]
+                        ]
+                \end{forest}\qquad
+                \begin{forest}
+                    [5
+                        [4]
+                        [6, phantom]]
+                \end{forest}\qquad
+                \begin{forest}
+                    [6
+                        [5]
+                        [7, phantom]]
+                \end{forest}
+            \end{center}
+            $j - i = 3$:
+            \begin{center}
+                \begin{forest}
+                    [2
+                        [1]
+                        [3]
+                    ]
+                \end{forest}\qquad
+                \begin{forest}
+                    [3
+                        [2]
+                        [4]
+                    ]
+                \end{forest}\qquad
+                \begin{forest}
+                    [4
+                        [3]
+                        [5]
+                    ]
+                \end{forest}\qquad
+                \begin{forest}
+                    [6
+                        [5
+                        [4]
+                        [8, phantom]]
+                        [7, phantom]]
+                \end{forest}
+            \end{center}
+            $j - i = 4$:
+            \begin{center}
+                \begin{forest}
+                    [3
+                        [2
+                        [1]
+                        [3, phantom]]
+                        [4]]
+                \end{forest}\qquad
+                \begin{forest}
+                    [3
+                        [2]
+                        [5
+                        [4]
+                        [6, phantom]]]
+                \end{forest}\qquad
+                \begin{forest}
+                    [5
+                        [3
+                            [2, phantom]
+                            [4]
+                        ]
+                        [6]
+                    ]
+                \end{forest}
+            \end{center}
+            $j - i = 5$:
+            \begin{center}
+                \begin{forest}
+                    [3
+                        [2
+                            [1]
+                            [3, phantom]
+                        ]
+                        [5
+                            [4]
+                            [6, phantom]
+                        ]
+                    ]
+                \end{forest}
+                \begin{forest}
+                    [5
+                        [3
+                            [2]
+                            [4]
+                        ]
+                        [6]
+                    ]
+                \end{forest}
+            \end{center}
+            $j - i = 6$:
+            \begin{center}
+                \begin{forest}
+                    [5
+                        [3
+                            [2
+                                [1]
+                                [3, phantom]
+                            ]
+                            [4]
+                        ]
+                        [6]
+                    ]
+                \end{forest}
+            \end{center}
+            Hier ist die totale Zugriffszeit
+            \[
+                C(T') = 1\cdot 12 + 2\cdot (13 + 20) + 3\cdot (9 + 7) + 4\cdot 5 = 146.
+            \]
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        Sei $S = \{s_1, \ldots, s_n\}$ mit $s_1 < \cdots < s_n$ und seien $\beta_1, \ldots, \beta_n \in \mathbb{N}$. 
+    
+        Für $i < j$, sei $r_{i,j}$ der Schlüssel der Wurzel eines optimalen statischen Suchbaums für die Schlüsselmengen $\{s_{i+1}, \ldots, s_j\}$ bezüglich der Zugriffshäufigkeiten $\beta_{i+1}, \ldots, \beta_j$. Gibt es mehrere optimale Suchbäume, so sei $r_{i,j}$ der kleinste Schlüssel, der als Wurzel eines optimalen Suchbaums in Frage kommt.
+        
+        \begin{enumerate}[label=(\alph*)]
+            \item Zeigen Sie per Induktion über $\ell := j' - i$, dass für alle $0 \leq i \leq i' \leq j \leq j' \leq n$ die folgende Ungleichung gilt:
+            \[
+                C_{i,j}^{\text{opt}} + C_{i',j'} ^{\text{opt}}\leq C_{i,j'} ^{\text{opt}}+ C_{i',j}^{\text{opt}}.
+            \]
+            \textit{Hinweis: Unterscheiden Sie Fälle danach, wo sich $r_{i,j'}$ befindet.}
+            \begin{proof}
+                Wir zeigen die Aussage per vollständiger Induktion. \\
+                Induktionsanfang: $\ell = 0$, also $i = j' = 0$, daraus folgt direkt $0 = i = i' = j = j'$ und somit gilt: \begin{align*}
+                    C_{i,j}^{\opt} = C_{i',j'} ^{\opt} = C_{0,0}^{\opt} \leq C_{0,0}^{\opt} = C_{i,j'} ^{\opt} = C_{i',j}^{\opt}.
+                \end{align*} Nach Induktionsvoraussetzung gilt für alle $0 \leq i \leq i' \leq j \leq j' \leq n$ mit $\ell := j' - i \leq m$:
+                \begin{align*}
+                    C_{i,j}^{\text{opt}} + C_{i',j'} ^{\text{opt}}\leq C_{i,j'} ^{\text{opt}}+ C_{i',j}^{\text{opt}}.
+                \end{align*} Wir zeigen nun, dass diese Aussage für $\ell = m+1$ gilt und damit auch für $\ell = m$. Dabei gilt nach Korollar (18|74):
+                \begin{align*}
+                    &C_{i,j}^{\opt}=w_{i,j}+\min_{i+1 \leq k \leq j}(C_{i, k-1}^{\opt} + C_{k, j}^{\opt})
+                    \intertext{mit}
+                    &w_{i,j} = \sum_{k= i+1}^j \beta_k .
+                \end{align*}Sei $s_k$ der Wurzelknoten, dann zeigen wir, dass die Aussage für alle möglichen Fälle gilt. Nach Voraussetzung der Schlüsselmenge, gibt es für $k$, also $r_{i,j'}$ drei unterschiedliche Fälle. Dabei gibt es einen linken und rechten Teilbaum, mit $T_{i, k-1}^{\opt}$ als linken und $T_{k, j'}^{\opt}$ als linken. Wir führen nun die Fallunterscheidung durch.
+                \begin{align*}
+                    \intertext{Für $k < i'$ gilt:}
+                    &C_{i,j'}^{\opt} = w_{i,j'}+C_{i, k-1}^{\opt} + C_{k, j'}^{\opt} \quad \text{ und } \quad
+                    C_{i',j}^{\opt} = w_{i',j}+C_{i', k-1}^{\opt} + C_{k, j}^{\opt}
+                    \intertext{wobei $C_{i',j}^{\opt}, C_{i,j'}^{\opt}$ disjunkt sind, womit $C_{i',j'}^{\opt}, C_{i,j}^{\opt}$ kürzer als $\ell +1$ sind, sodass nach Induktionsvoraussetzung sofort folgt:}
+                    &C_{i,j}^{\text{opt}} + C_{i',j'} ^{\text{opt}}\leq C_{i,j'} ^{\text{opt}}+ C_{i',j}^{\text{opt}}.
+                    \intertext{Für $i' \leq k < j$ liegt die Wurzel in beiden Intervallen, also $[i+1,j]$ und $[i'+1, j']$, dann gilt:}
+                    &C_{i,j}^{\opt} \leq w_{i,j}+C_{i, k-1}^{\opt} + C_{k, j}^{\opt} \\
+                    &C_{i',j'}^{\opt} \leq w_{i',j'}+C_{i', k-1}^{\opt} + C_{k, j'}^{\opt}
+                    \intertext{Dann ist:}
+                    &C_{i,j}^{\opt} + C_{i',j'}^{\opt} \leq w_{i,j}+C_{i, k-1}^{\opt} + C_{k, j}^{\opt} + w_{i',j'}+C_{i', k-1}^{\opt} + C_{k, j'}^{\opt} \\ &= (w_{i,j} + w_{i',j'})+C_{i, k-1}^{\opt} + C_{k, j}^{\opt}+C_{i', k-1}^{\opt} + C_{k, j'}^{\opt}.
+                    \intertext{Weiter sei für $r_{i,j'}$ als optimale Wurzel nach Voraussetzung:}
+                    &C_{i,j'}^{\opt} = w_{i,j'}+C_{i, k-1}^{\opt} + C_{k, j'}^{\opt} \quad \text{ und } \quad
+                    C_{i',j}^{\opt} = w_{i',j}+C_{i', k-1}^{\opt} + C_{k, j}^{\opt}.
+                    \intertext{Daraus ergibt sich:}
+                    &C_{i,j}^{\opt} + C_{i',j'}^{\opt} \leq (w_{i,j} + w_{i',j'})+C_{i, k-1}^{\opt} + C_{k, j}^{\opt}+C_{i', k-1}^{\opt} + C_{k, j'}^{\opt} \\
+                    & = (w_{i,j} + w_{i',j'}) + C_{i,j'} - w_{i,j'} + C_{i',j} - w_{i',j} \\
+                    & C_{i,j}^{\opt} + C_{i',j'}^{\opt} -w_{i,j} + w_{i',j'} \leq C_{i,j'} - w_{i,j'} + C_{i',j} - w_{i',j}
+                    \intertext{Mit Induktionsvoraussetzung und $w_{i,j} + w_{i',j'} = w_{i,j'} + w_{i',j}$ folgt dann:}
+                    & C_{i,j}^{\opt} + C_{i',j'} ^{\opt}\leq C_{i,j'} ^{\opt}+ C_{i',j}^{\opt}.
+                    \intertext{Für $k \geq j$ gilt:}
+                    &C_{i,j'}^{\opt} = w_{i,j'}+C_{i, k-1}^{\opt} + C_{k, j'}^{\opt} \quad \text{ und } \quad 
+                    C_{i,j}^{\opt} = w_{i,j}+C_{i, k-1}^{\opt} + C_{k, j}^{\opt}
+                    \intertext{wobei $C_{i,j}^{\opt}, C_{i,j'}^{\opt}$ disjunkt sind, womit $C_{i',j'}^{\opt}, C_{i',j}^{\opt}$ kürzer als $\ell +1$ sind, sodass nach Induktionsvoraussetzung sofort folgt:}
+                    &C_{i,j}^{\opt} + C_{i',j'} ^{\opt}\leq C_{i,j'} ^{\opt}+ C_{i',j}^{\opt}.
+                \end{align*}
+            \end{proof}
+            \item\label{item:monotony} Zeigen Sie, dass für alle $0 \leq i < j \leq n - 1$ die folgenden Monotonieeigenschaften gelten:
+            \[
+                r_{i,j} \leq r_{i,j+1}, \quad r_{i,j+1} \leq r_{i+1,j+1}.
+            \]
+            \textit{Hinweis: Nehmen Sie das Gegenteil an und wenden Sie Teil (a) auf die Intervallgrenzen sowie die Nummern der Schlüssel an den Wurzeln an, um einen Widerspruch abzuleiten.}
+            \begin{proof}
+                Wir führen einen Beweis per Widerspruch. Angenommen es sei $r_{i,j} > r_{i,j+1}, \ \ \ r_{i,j+1} > r_{i+1,j+1}$ für alle $0 \leq i < j \leq n - 1$. Dann gilt nach Voraussetzung, dass der kleinste Schlüssel $r_{i,j}$ der als Wurzel für einen optimalen Suchbaum in Frage kommt die Wurzel ist.  
+                \begin{align*}
+                    \intertext{Damit ist für $r_{i,j} > r_{i,j+1}$, womit $r_{i,j+1}$ als kleinere Schlüssel die Wurzel wäre:}
+                    &C_{i,j}^{\opt}=w_{i,j}+C_{i, k-1}^{\opt} + C_{k, j}^{\opt} \quad \text{und} \quad                 C_{i,j+1}^{\opt}=w_{i,j+1}+C_{i, k-1}^{\opt} + C_{k, j+1}^{\opt}
+                    \intertext{sowie}
+                    &C_{i+1,j+1}^{\opt}=w_{i+1,j+1}+C_{i+1, k-1}^{\opt} + C_{k, j+1}^{\opt} \quad \text{und} \quad
+                    C_{i+1,j}^{\opt}=w_{i+1,j}+C_{i+1, k-1}^{\opt} + C_{k, j}^{\opt}.
+                    \intertext{Sei $i'=i+1$ und $j'=j+1$, dann gilt mit a:}
+                    &C_{i,j}^{\opt} + C_{i+1,j+1}^{\opt} \leq C_{i,j+1}^{\opt} + C_{i+1,j}^{\opt}
+                    \intertext{Wegen der Annahme, dass $r_{i,j+1}$ als kleinere Schlüssel die Wurzel wäre, gilt dann aber}
+                    &C_{i,j}^{\opt} + C_{i+1,j+1}^{\opt} > C_{i,j+1}^{\opt} + C_{i+1,j}^{\opt}
+                    \intertext{was ein Widerspruch zur gezeigten Aussage ist, womit gilt:}
+                    &r_{i,j} \leq r_{i,j+1}
+                    \intertext{Analog zeigen wir das nun für $r_{i,j+1} \leq r_{i+1,j+1}$. Angenommen es sei $r_{i,j+1} > r_{i+1,j+1}$, womit $r_{i+1,j+1}$ die Wurzel wäre, dann gilt:}
+                     &C_{i+1,j+1}^{\opt}=w_{i+1,j+1}+C_{i+1, k-1}^{\opt} + C_{k, j+1}^{\opt}  \quad \text{und} \quad                 C_{i,j+1}^{\opt}=w_{i,j+1}+C_{i, k-1}^{\opt} + C_{k, j+1}^{\opt}
+                    \intertext{sowie}
+                    &C_{i,j}^{\opt}=w_{i,j}+C_{i, k-1}^{\opt} + C_{k, j}^{\opt} \quad \text{und} \quad
+                    C_{i+1,j}^{\opt}=w_{i+1,j}+C_{i+1, k-1}^{\opt} + C_{k, j}^{\opt}.
+                     \intertext{Sei $i'=i+1$ und $j'=j+1$, dann gilt mit a:}
+                    &C_{i,j}^{\opt} + C_{i+1,j+1}^{\opt} \leq C_{i,j+1}^{\opt} + C_{i+1,j}^{\opt}
+                    \intertext{Wegen der Annahme, dass $r_{i+1,j+1}$ die Wurzel wäre, gilt dann aber }
+                    &C_{i,j}^{\opt} + C_{i+1,j+1}^{\opt} > C_{i,j+1}^{\opt} + C_{i+1,j}^{\opt}
+                    \intertext{was ein Widerspruch zur gezeigten Aussage ist, womit gilt:}
+                    &r_{i,j+1} \leq r_{i+1,j+1}
+                \end{align*}
+            \end{proof}
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        Wir verbessern das Programm, indem wir in der Berechnung von $\min(C^{\opt}_{i, k - 1}, C^{\opt}_{k, j})$ nicht $k \in \{i + 1, \ldots, j\}$, sondern von $r_{i, j - 1}$ zu $r_{i + 1}, j$ laufen lassen.
+        \begin{theorem*}
+            Dieser Weg funktioniert korrekt.
+        \end{theorem*}
+        \begin{proof}
+            Laut Monotonieeigenschaften von Aufgabe 2\ref{item:monotony} liegt die Wurzel eines Baumes $T_{i, j + 1}$ zwischen $r_{i, j}$ und $r_{i + 1, j + 1}$. Damit muss auch diese Eigenschaft gelten.
+        \end{proof}
+        \begin{theorem*}
+            Dieser Weg verbessert die Funktion auf $\BigO(n^2)$.
+        \end{theorem*}
+        \begin{proof}
+            Für jedes $\ell = j - i$ sorgt diese Eigenschaft dafür, dass die Werte fuer $k$ monoton steigen. Jeder Suchbaum muss eine Wurzel haben, die zwischen den Wurzeln der beiden Vorgaengerbäume $T_{i, j - 1}, T_{i + 1, j}$ liegt. Damit ergeben sich insgesamt nicht mehr als $\BigO(n)$ Werte innerhalb jedes $\ell$, die wir als Wurzeln für alle Bäume dieser Ebene nutzen können.
+        \end{proof}
+    \end{aufgabe}
+    \begin{aufgabe}
+        Wir lösen die Aufgaben \ref{item:openclosebracks}, \ref{item:minusoneone} und \ref{item:pointsonacirc}:
+        \begin{enumerate}[label=(\alph*)]
+            \item\label{item:openclosebracks} Die Zahl der Möglichkeiten, $n$ öffnende und $n$ schließende Klammern korrekt zu platzieren, beträgt
+            \[
+                C_n = \frac{1}{n + 1}\binom{2n}{n}.
+            \]
+            \begin{proof}
+                Wir zeigen, dass die Lösung dieser Aufgabe auf Teilaufgabe \ref{item:minusoneone} zurückzuführen ist. Wir kodieren dafür in dem String mit $a_j \in {-1, 1}$ jede $1$ mit einer sich öffnenden Klammer und jede $-1$ mit einer schließenden Klammer. Da für jedes $j, 0 \leq j \leq 2n$ gilt, dass $\sum_{k = 1}^j a_k\geq 0$, muss es zu jedem Zeitpunkt mehr als oder ebensoviele öffnende wie schließende Klammern gegeben haben. Zudem gilt, dass $\sum_{k = 1}^{2n} a_k = 0$ ist, also muss es zu Ende ebensoviele öffnende wie schließende Klammern gegeben haben. Diese beiden Aussagen sind daher äquivalent.
+            \end{proof}
+            \item\label{item:minusoneone} Die Zahl der Sequenzen $a_1,\ldots, a_{2n}$, $a_j \in \{-1,1\}$ unter den gegebenen Voraussetzungen beträgt
+            \[
+                C_n = \frac{1}{n + 1}\binom{2n}{n}.
+            \]
+            \begin{proof}
+                Wir zeigen, dass die Anzahl der Möglichkeiten hier $\frac{1}{n + 1}\binom{2n}{n}$ beträgt.
+
+                Zunächst beträgt die Anzahl der Möglichkeiten, $n$ Mal $1$ und $n$ Mal $-1$ unabhängig von weiteren Bedingungen zu platzieren, $\binom{2n}{n}$, da wir aus $2n$ Positionen $n$ auswählen, um $1$ (oder $-1$) zu enthalten. Diese Möglichkeiten gruppieren wir in $n + 1$ Gruppen, je nachdem, für wie viele $j$ gilt, dass $\sum_{k = 1}^j < 0$ ist. Ein Beispiel dazu für $n = 2$:
+                \begin{center}
+                    \begin{tabular}{c r r r r}
+                        0: &1&$-1$&1&$-1$\\
+                        &1&1&$-1$&$-1$\\\hline
+                        1: &$-1$&1&1&$-1$\\
+                        & 1&$-1$&$-1$&1\\\hline
+                        2: &$-1$&$-1$&1&1\\
+                        &$-1$&1&$-1$&1
+                    \end{tabular}
+                \end{center}
+                Da es eine Gruppe für $0$ gibt und die Zahl $-1$ höchstens $n$ Mal vorkommen kann, gibt es $n + 1$ Gruppen. Diese Gruppen sind auch gleich groß: Ein jedes Element der $k$-ten Gruppe kann mittels Spiegeln der Zeichenkette in ein Element der $n-k$-ten Gruppe überführt werden. Auch kann ein Element einer Gruppe in ein Element der vorherigen Gruppe überführt werden, indem die Elemente vor dem ersten $j$, für das gilt, dass $\sum_{k = 1}^j < 0$ ist, mit den Elementen dahinter getauscht werden. So müssen alle Gruppen die gleiche Größe haben. Da es $n + 1$ Gruppen und $\binom{2n}{n}$ Elemente gibt, muss jede Gruppe $\frac{1}{n + 1}\binom{2n}{n}$ Elemente enthalten. Es gibt nur eine Gruppe, die die Bedingung erfüllt, dass zu keinem Zeitpunkt $\sum_{k = 1}^j < 0$ ist. Daher gibt es $\frac{1}{n + 1}\binom{2n}{n} = C_n$ Elemente, für die die Bedingung erfüllt ist.
+            \end{proof}
+            \item\label{item:pointsonacirc} Die Zahl der Möglichkeiten, $2n$ Punkte auf einem Kreis paarweise ohne Überkreuzungen zu verbinden, beträgt
+            \[
+                C_n = \frac{1}{n + 1}\binom{2n}{n}.
+            \]
+            \begin{proof}
+                Wir zeigen, dass die Lösung dieser Aufgabe auf Aufgabe \ref{item:openclosebracks} zurückzuführen ist. Dafür abstrahieren wir den Kreis. Wir schneiden den Kreis an einer beliebigen Stelle und legen den Umfang des Kreises flach hin. Die Linien bleiben dabei nach oben zeigende Bögen, die sich weiterhin verbinden. Das linke Ende eines Bogens kodieren wir als sich öffnende Klammern, das rechte Ende eines Bogens kodieren wir als schließende Klammer. Eine Illustration dazu:
+
+                \begin{center}
+                    \begin{tikzpicture}
+                        \draw[color=black!60, very thick](0,0) circle (2.5);
+                        \coordinate (p1) at (-0.76833,2.37900);
+                        \coordinate (p2) at (-2.00286,-1.49618);
+                        \coordinate (p3) at (-0.56800524,-2.43461908);
+                        \coordinate (p4) at (1.55402492,-1.95831727);
+                        \coordinate (p5) at (2.48751041,0.24958354);
+                        \coordinate (p6) at (2.1939564,1.19856385);
+                        \draw[thick, teal!60] (p1) -- (p2);
+                        \draw[thick, NavyBlue!60] (p3) -- (p6);
+                        \draw[thick, purple!60] (p4) -- (p5);
+                        \filldraw[teal!60] (p1) circle (3pt) node[above left] (n1) {$a_1$};
+                        \filldraw[teal!60] (p2) circle (3pt) node[below left] (n2) {$a_2$};
+                        \filldraw[NavyBlue!60] (p3) circle (3pt) node[below=2pt] (n3) {$b_2$};
+                        \filldraw[NavyBlue!60] (p6) circle (3pt) node[above right] (n6) {$b_1$};
+                        \filldraw[purple!60] (p4) circle (3pt) node[below right] (n4) {$c_2$};
+                        \filldraw[purple!60] (p5) circle (3pt) node[right=2pt] (n5) {$c_1$};
+                    \end{tikzpicture}
+                \end{center}
+                Übersetzt sich mit dieser Methode zu:
+                \begin{center}
+                    \begin{tikzpicture}[scale=0.7]
+                        \coordinate (el) at (0,0);
+                        \coordinate (er) at (15.70796,0);
+                        \draw[very thick, black!60] (el) -- (er);
+                        \coordinate (p1) at (4.75,0);
+                        \coordinate (p2) at (9.25,0);
+                        \coordinate (p3) at (11.25,0);
+                        \coordinate (p4) at (13.5,0);
+                        \coordinate (p5) at (0.25,0);
+                        \coordinate (p6) at (1.25,0);
+                        \coordinate (p12mid) at ($(p1)!0.5!(p2)$);
+                        \coordinate (p36mid) at ($(p3)!0.5!(p6)$);
+                        \coordinate (p45mid) at ($(p4)!0.5!(p5)$);
+                        \draw[thick, teal!60] (p12mid) (p2) arc(0:180:2.25);
+                        \draw[thick, purple!60] (p45mid) (p4) arc(0:180:6.625);
+                        \draw[thick, NavyBlue!60] (p36mid) (p3) arc(0:180:5);
+                        \filldraw[teal!60] (p1) circle (3pt) node[below] (n1) {$a_1$};
+                        \filldraw[teal!60] (p2) circle (3pt) node[below] (n2) {$a_2$};
+                        \filldraw[NavyBlue!60] (p3) circle (3pt) node[below] (n3) {$b_2$};
+                        \filldraw[purple!60] (p4) circle (3pt) node[below] (n4) {$c_2$};
+                        \filldraw[purple!60] (p5) circle (3pt) node[below] (n5) {$c_1$};
+                        \filldraw[NavyBlue!60] (p6) circle (3pt) node[below] (n6) {$b_1$};
+                    \end{tikzpicture}
+                \end{center}
+                Übersetzt sich wiederum zu
+                \[
+                    ((()))
+                \]
+                Da die Linien sich nicht schneiden, schneiden die Bögen sich nicht. Wenn die Bögen sich nicht schneiden, muss es immer mehr oder ebensoviele öffnende wie schließende Klammern geben. Zu Ende muss es ebensoviele öffnende wie schließende Klammern, ebensoviele linke wie rechte Anker für die Bögen gegeben haben.
+            \end{proof}
+        \end{enumerate}
+    \end{aufgabe}
+\end{document}

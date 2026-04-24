@@ -1,0 +1,22 @@
+\documentclass{standalone}
+
+\usepackage[linesnumbered, noline, ruled]{algorithm2e}
+
+\SetKwComment{Comment}{$\triangleright$\ }{}
+\begin{document}
+    \begin{algorithm}[H]
+    \caption{bla}
+		$M(0, 0) \gets m_{00}$\Comment*[r]{moo says the cow afaik}
+		\For{$i \gets 1$ \KwTo $m$}{
+			$M(i, 0) \gets M(i - 1, 0) + m_{i0}$
+		}
+		\For{$j \gets 1$ \KwTo $n$}{
+			$M(0, j) \gets M(0, j - 1) + m_{0j}$
+		}
+		\For{$i \gets 1$ \KwTo $m$}{
+			\For{$j \gets 1$ \KwTo $n$}{
+				$M(i, j) \gets \max\{M(i - 1, j), M(i, j - 1)\} + m_{ij}$
+			}
+		}
+	\end{algorithm}
+\end{document}

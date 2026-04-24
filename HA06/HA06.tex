@@ -1,0 +1,316 @@
+\documentclass{scrartcl} % file is in UTF-8 Encoding
+
+\usepackage[T1]{fontenc}
+
+\input{template}
+%---------------- VARS --------------%
+\newcommand{\headvorlage}{	
+	\group{24} \hfill \textbf{\semester} \\
+	\begin{tabular}{@{}l r}
+		\student{Philine Stella Bock}{507316}
+		\student{Devagya Sharma}{495395}
+		\student{Simon Seemüller}{513084}
+	\end{tabular}
+	\haloesung{06}
+}
+% äüöß
+\begin{document}
+    \setcounter{auf}{0}
+	\headvorlage
+    \begin{aufgabe}
+        Zunächst schreiben wir eine Funktion {\ttfamily buildTree}, die aus einer Menge $S$ einen Radixbaum $T$ generiert. Dafür iterieren wir in jedem Element $s$ in der Menge $S$ über jedes Zeichen und wandern in dem Baum nach links, falls das Zeichen eine 0 ist, und nach rechts, falls das Item eine 1 ist. Dabei kann es sein, dass wir zunächst die entsprechenden Wege erstellen müssen. Am Ende der Iteration über $s$ setzen wir den Wert des aktuellen Knotens auf das Element in der Menge, über das wir eben iteriert haben.
+        
+        \begin{algorithm}[H]
+            \caption{\ttfamily buildTree(S)}
+            \KwIn{Menge $S$, leerer Baum $T$ mit $T$.root $\neq$ None}
+            \KwOut{Radixbaum $T$ für Menge $S$}
+            \For{$s \in S$}{
+                curr $\gets$ T.root\\
+                \For{$c \in s$}{
+                    \If{$c = 0$}{
+                        \If{curr.left $=$ None}{
+                            curr.left $\gets$ Node(None)
+                        }
+                        curr $\gets$ curr.left
+                    }
+                    \Else{
+                        \If{curr.right = None}{
+                            curr.right $\gets$ Node(None)
+                        }
+                        curr $\gets$ curr.right
+                    }
+                }
+                curr.value $\gets$ c
+            }
+            \Return{$T$}
+        \end{algorithm}
+        Wir schreiben auch eine weitere Funktion, die alle Elemente in einem Radix-Baum in lexikographischer Reihenfolge zurückgibt.
+        
+        \begin{algorithm}[H]
+            \caption{\ttfamily retEles(n)}
+            \KwIn{Ein Knoten $n$ in einem Radixbaum}
+            \KwOut{Der Teilbaum unter $n$ in lexikographischer Reihenfolge}
+            \If{n = None}{
+                \Return{}
+            }
+            print(n.value)\\\ttfamily
+            retEles(n.left)\\
+            retEles(n.right)
+        \end{algorithm}
+        \begin{algorithm}[H]
+            \caption{Einen Radix-Baum nutzen, um Liste zu sortieren}
+            $T \gets$ {\ttfamily buildTree(S)}\\
+            {\ttfamily retEles(T.root)}
+        \end{algorithm}
+        \begin{theorem*}
+            Die Laufzeit des Algorithmus liegt in $\Theta(n)$, wobei $n$ die Summe der Längen der Elemente in $S$ ist.
+        \end{theorem*}
+        \begin{proof}
+            Wir zeigen separat, dass die Laufzeit der Funktionen {\ttfamily retELes} und {\ttfamily buildTree} linear in der Eingabegröße liegen.
+
+            Für {\ttfamily retEles} ergibt sich: Für jeden Knoten wird genau ein rekursiver Aufruf durchgeführt. Die Laufzeit liegt damit in $\BigO(S) \leq \BigO(n)$.
+
+            Bei {\ttfamily buildTree} durchlaufen wir jedes Zeichen jedes Elements in zwei geschachtelten {\ttfamily for}-Schleifen. In diesen {\ttfamily for}-Schleifen geschehen lediglich Dinge in konstanter Zeit. Daraus ergibt sich eine Laufzeit von $\BigO(n)$, da $n$ als Summe aller Längen aller Elemente in $S$ definiert war. 
+        \end{proof}
+        \begin{theorem*}
+            Der Algorithmus ist korrekt.
+        \end{theorem*}
+        \begin{proof}
+            Jeder Eintrag wird an seiner korrekten Stelle untergebracht: Falls das aktuelle Zeichen eine $0$ ist, geht der Algorithmus nach links und baut dort möglicherweise einen Knoten. Falls das aktuelle Zeichen eine $1$ ist, geschieht das auf der anderen Seite. Der Algorithus wandert so lange in die korrekte Richtung, bis das aktuelle Element keine weiteren Zeichen enthält, und setzt den Wert des Knotens, bei dem es nun ist, auf das Element. Diese Prozedur wird für alle Elemente in $S$ durchgeführt.
+        \end{proof}
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item ~
+        \end{enumerate}
+            \begin{algorithm}[H]
+                \caption{{\ttfamily Inorder-Tree-Walk(x)} (iterativ)}
+                \KwIn{Knoten $x$ in einem Suchbaum $T$, leerer Stack $S$}
+                \KwOut{In-Order-Traversierung des Teilbaumes von $T$ unter $x$}
+                curr $\gets$ x\\
+                \While{!{\ttfamily S.isEmpty()} or {\ttfamily curr.left} $\neq$ None or {\ttfamily curr.right} $\neq$ None}{
+                    \uIf{{\ttfamily curr.left} $\neq$ None}{
+                        {\ttfamily S.push}(curr)\\
+                        curr $\gets$ {\ttfamily curr.left}
+                    }
+                    \Else{
+                        print(curr)\\
+                        \uIf{{\ttfamily curr.right} $\neq$ None}{
+                            curr $\gets$ {\ttfamily curr.right}
+                        }
+                        \Else{
+                            curr $\gets$ {\ttfamily S.pop}()\\
+                            print(curr)\\
+                            curr $\gets$ {\ttfamily curr.right}
+                        }
+                    }
+                }
+                print(curr)
+            \end{algorithm}
+        \begin{enumerate}[label=]
+            \item 
+            \begin{theorem*}
+                Der Algorithmus ist korrekt.
+            \end{theorem*}
+            \begin{proof}
+                Der Knoten {\ttfamily curr} ist so lange ein Knoten mit Kindern, wie es noch unbesuchte Knoten mit Kindern gibt: Falls es ein linkes Kind gibt, wird der Knoten so lange im Stack gespeichert, wie es noch weitere Knoten unter diesem Knoten gibt. Danach wird der Knoten geprintet und {\ttfamily curr} auf seinen aktuellen Kindknoten gesetzt. Falls es keinen linken Kindknoten gibt, wird {\ttfamily curr} stattdessen auf den rechten Kindknoten gesetzt. Damit wird eine korrekte Abarbeitung der Knoten gewährleistet und alle Knoten abgearbeitet.
+            \end{proof}
+        \end{enumerate}
+        \begin{enumerate}[label=(\alph*)]
+            \setcounter{enumi}{1}
+            \item Wir zeigen per Induktion: Sei $k$ die Anzahl der während des gesamten Durchlaufs des Algorithmus besuchten Knoten und $n$ die gesamte Anzahl von Knoten in dem Baum. Dann gilt: $\exists \alpha, c\in \N: k \leq \alpha \cdot n + c $.
+
+            \begin{proof}[Beweis durch starke Induktion über die Anzahl der Knoten.]
+                Induktionsanfang: Für $n = 1$, $n = 2$ gilt die Aussage. Der Algorithmus wandert für Knotenanzahl $1$ nur zum kleinsten Knoten des Baumes und geht dort nicht weiter. Für Knotenanzahl $2$ geht der Algorithmus zunächst zum kleineren der beiden Knoten und von dort aus zu dessen Nachfolger für insgesamt im schlechtesten Fall $3 = 1\cdot n$ Knotenbesuche.
+
+                Induktionsvoraussetzung: Für alle Bäume der Knotenanzahl $j: 0 \leq j < n$ gilt: Der Algorithmus besucht auf dem Baum höchstens $\alpha\cdot j + c$ Knoten.
+
+                Induktionsschritt: Dann gilt auch: Der Algorithmus besucht auf dem Baum höchstens $\alpha\cdot n + c$ Knoten. Ohne Beschränkung der Allgemeinheit gehen wir davon aus, dass wir in einen der Bäume aus der Induktionsvoraussetzung ein Blatt einfügen, da für diesen Beweis lediglich die Struktur des Baumes relevant ist. Das Einfügen eines Blattes in einen Baum kann die Anzahl der besuchten Knoten um höchstens zwei erhöhen: Da wir ein Blatt eingefügt haben, ist der Knoten jedenfalls Baumnachfolger einer höheren Ebene. 
+                
+                Falls es sich um den kleinsten Knoten im Baum handelt, so ändert sich die Länge der Suche nach {\ttfamily Tree-Minimum(T.root)} um 1. Danach benötigen wir noch einen weiteren zusätzlichen Knotenbesuch, um den Nachfolger dieses Knotens zu finden. Dieser ist hier in jedem Fall sein direkter Elternknoten. Danach hat sich nichts weiteres an dem Baum verändert, er benötigt weiterhin so viele Knotenbesuche wie in der vorigen Knotenanzahl.
+
+                Falls es sich nicht um den kleinsten Knoten im Baum handelt, handelt es sich um einen Knoten, der Nachfolger eines anderen Knotens ist. Dann benötigen wir zusätzliche Zeit, um diesen Nachfolger zu finden. Ist er das linke Kind eines Knotens, war der vorherige Nachfolger des Knotens, dessen Nachfolger er ist, sein Elternknoten. Dann benötigen wir wieder einen zusätzlichen Knotenbesuch, um ihn zu finden, und einen weiteren, um zu seinem Elternknoten zurückzukehren. Ist er stattdessen das rechte Kind eines Knotens, so ist er höchstens Nachfolger seines Elternknotens, da er ein Blattknoten ist. Damit benötigen wir einen weiteren Knotenbesuch, um ihn selbst zu finden, und einen Knotenbesuch, um zu seinem Elternknoten zurückzukehren, um dort nach seinem Nachfolger zu sehen. Auch hier haben wir nicht mehr als zwei zusätzliche Knotenbesuche im Vergleich zur vorherigen Knotenanzahl.
+            \end{proof}
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item Wir zeigen: jeder extremale AVL-Baum der Höhe $h$ hat die minimale Blätteranzahl aller AVL-Bäume der Hoehe $h$.
+            
+            \begin{proof}[Beweis durch starke Induktion.]
+                Induktionsanfang: $h = 0, h = 1$:
+                
+                Extremale AVL-Bäume der Höhe $h = 0, h = 1$ haben jeweils die minimale Blätteranzahl für alle AVL-Bäume ihrer Höhen.
+                \begin{figure}[H]
+                    \centering
+                    \caption{Extremaler AVL-Baum der Höhe $0$}
+                    \begin{forest}
+                        for tree={draw, circle, minimum size=3ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                        []
+                    \end{forest}
+                    
+                \end{figure}
+                \begin{figure}[H]
+                    \centering
+                    \caption{Extremaler AVL-Baum der Höhe 1}
+                    \begin{forest}
+                            for tree={draw, circle, minimum size=3ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                            [[][, phantom]]
+                    \end{forest}
+                \end{figure}
+                Induktionsvoraussetzung: Für jeden extremalen AVL-Baum $\overline{T}$ mit Höhe $h, 0 \leq h < k$ gilt: $\overline{T}$ hat minimale Blätteranzahl.
+
+                Induktionsschritt: $(h \to k)$: Dann gilt auch: Der extremale AVL-Baum der Höhe $k$ hat minimale Blätteranzahl für einen Baum dieser Höhe. 
+
+                Die Anzahl der Blätter für einen extremalen AVL-Baum der Höhe $k$ entspricht der Summe der Blätter zweier extremaler AVL-Baumes der Hoehe $k - 1$ und $k - 2$. Da diese beiden Bäume laut Voraussetzung eine minimale Anzahl der Blätter haben, kann es keinen Baum der Hoehe $k$ mit weniger als $B(k - 1) + B(k - 2)$ Blättern geben.
+            \end{proof}
+            \item Das gilt nicht. Der folgende Baum stellt ein Gegenbeispiel dar.
+            \begin{center}
+                \begin{forest}
+                    for tree={draw, circle, minimum size=3ex, fill=teal!60, inner sep = 5pt, s sep=7mm},
+                    [
+                        [
+                            [
+                                [
+                                    []
+                                    [, phantom]
+                                ]
+                                []
+                            ]
+                            [
+                                []
+                                [, phantom]
+                            ]
+                        ]
+                        [
+                            [
+                                []
+                                [, phantom]
+                            ]
+                            [
+                                []
+                                [, phantom]
+                            ]
+                        ]
+                    ]
+                \end{forest}
+            \end{center}
+            Dieser Baum hat die minimale Anzahl Blätter für einen Baum der Höhe 4, ist jedoch kein extremaler AVL-Baum.
+            \item Wir zeigen zunächst durch starke Induktion: Sei $T(h)$ die Anzahl der Knoten eines Baumes von Höhe $h$ und $\Phi$ der goldene Schnitt. Dann ist 
+            \[
+                T(h) \geq \Phi\cdot T(h - 1).
+            \]
+            Anzumerken ist, dass auch 
+            \[
+                \frac{T(h)}{\Phi} \geq T(h - 1)
+            \]
+            folgt.
+            \begin{proof}[Beweis durch starke Induktion über die Höhe des Baumes]
+                Induktionsanfang $(h = 1, h = 2)$: Für $h = 1$ hat der Baum mindestens zwei Knoten. \[
+                2 \geq \Phi \cdot 1
+                \]
+                gilt.
+                Für $h = 2$ hat ein AVL-Baum mindestens vier Knoten.
+                \[
+                4 \geq \Phi \cdot 2
+                \]
+                gilt auch. Damit ist der Induktionsanfang bestätigt.
+
+                Induktionsvoraussetzung: Für alle AVL-Bäume von Höhe $k, 1 \leq k < n$ gilt: Die Anzahl der Knoten $T(k)$ erfüllt die Ungleichung
+                \[
+                    T(k) \geq \Phi\cdot T(k - 1).
+                \]
+
+                Induktionsschritt: Dann gilt auch:
+                \[
+                    T(n) \geq \Phi\cdot T(n - 1).
+                \]
+                \begin{align*}
+                    \intertext{Laut Rekursionsformel extremaler AVL-Bäume gilt:}
+                    T(n) &\geq 1 + T(n - 1) + T(n - 2)
+                    \intertext{Daraus folgt laut Induktionsvoraussetzung:}
+                    &\geq 1 + T(n - 1) + \frac{T(n - 1)}{\Phi}\\
+                    &= 1 + T(n - 1)\Big(1 + \frac{1}{\Phi}\Big)\\
+                    \intertext{Wir machen uns die allgemein bekannte Eigenschaft von $\Phi$ zu Nutze, dass $1 + \frac{1}{\Phi} = \Phi$:}
+                    &= 1 + T(n - 1)\Phi\\
+                    &\geq \Phi\cdot T(n - 1)
+                \end{align*}
+                Und die Induktion ist abgeschlossen.
+            \end{proof}
+            Nun zeigen wir: 
+            \[
+                h(T) \leq \frac{1}{\log \Phi}\cdot \log \overline{n}.
+            \]
+            \begin{proof}
+                Wir schreiben alternativ:
+                \begin{align*}
+                    h(T) &\leq \frac{1}{\log \Phi}\cdot \log T(h)
+                    \intertext{Wobei $T(h)$ die Anzahl Knoten für einen beliebigen Baum der Höhe $h$ ist. Wir schätzen zunächst die rechte Seite mittels dem, was wir eben errechnet haben, nach unten ab:}
+                    &\leq \frac{1}{\log \Phi}\cdot \log\big(\Phi \cdot T(h - 1)\big)\\
+                    &= \frac{1}{\log \Phi}\cdot \big(\log \Phi + \log(T(h - 1))\big)\\
+                    &= 1 + \frac{1}{\log \Phi}\cdot \log \big(T(h - 1)\big)\\
+                    \intertext{Wir schätzen wieder die rechte Seite ab:}
+                    &\leq 1 + \frac{1}{\log \Phi}\cdot \log \big(\Phi\cdot T(h - 2)\big)\\
+                    &= 1 + \frac{1}{\log \Phi}\cdot \big(\log \Phi + \log (T(h - 2))\big)\\
+                    &= 1 + 1 + \frac{1}{\log \Phi}\cdot \log\big(T(h - 2)\big)\\
+                    \intertext{Wir können diese Abschätzung laut unserer Induktion insgesamt $h$ Mal machen und haben damit $h(T)$ Einsen. Daraus ergibt sich}
+                    h(T) &\leq h(T)
+                \end{align*}
+                Ist wahr, also ist die Aussage korrekt.
+            \end{proof}
+        \end{enumerate}
+    \end{aufgabe}
+    \begin{aufgabe}
+        \begin{enumerate}[label=(\alph*)]
+            \item Es kommen höchstens $k$ Bitflips in einer beliebigen Iteration vor. Dies ist genau dann der Fall, wenn alle Bits flippen müssen, damit Marcel den Binärstring um jeweils $1$ erhöhen möchte. Für den Fall, dass nur das führende Bit $0$ ist und alle folgenden Bits $1$ sind, ändert sich jedes Bit, sofern Marcel den Bitstring durch eine Iteration erhöhen will. Da es insgesamt k Bits gibt, ändern sich somit alle Bits. Mehr als k Bits existieren nicht, womit sich in einer Iteration auch nicht mehr ändern können. Das Beispiel ist also $011...111$, für k Bits. 
+            \item Sei $\Phi$ eine Potentialfunktion, wobei wir die als 
+            \begin{align*}
+                \Phi(D_i) = \text{Die Anzahl der Einsen im Bit}
+            \end{align*}
+            festlegen. Sofern nur ein Bitflip stattfindet von $0$ auf $1$ oder $1$ auf $0$, ist $c_i= 1$ und für $0$ auf $1$ ist 
+            \begin{align*}
+                \Phi(D_i) = \Phi(D_{i-1}) +1.
+            \end{align*} Findet ein Bitflip von $1$ auf $0$ statt, so gilt 
+            \begin{align*}
+                \Phi(D_i)= \Phi(D_{i-1}) - 1.
+            \end{align*} Damit ergibt sich für 
+            \begin{align*}
+                \Phi(D_i) - \Phi(D_{i-1}) = \begin{cases}
+                    \Phi(D_{i-1}) +1 - \Phi(D_{i-1}) = 1 & \text{ Bitflip von $0$ auf $1$} \\
+                    \Phi(D_{i-1}) -1 - \Phi(D_{i-1}) = -1 & \text{ Bitflip von $1$ auf $0$}
+                \end{cases}
+            \end{align*}
+            Somit ist Für den Fall, dass ein Bitflip stattfindet, also $c_i = 1$ 
+            \begin{align*}
+                \hat{c_i}= 1 -1 = 0 \leq 2 \quad \text{ oder } \quad \hat{c_i}= 1 +1 = 2 \leq 2.
+            \end{align*} Angenommen es gäbe $n \leq k$ Bitflips (da es maximal k Bitflips in einer Iteration geben kann, siehe Teil eins der Aufgabe), wobei $n \in \mathbb{N}$. Dann gilt für $\Phi(D_i)$ mit $n= m + o$, wobei $m$ alle Bitflips von $1$ auf $0$ und $o$ alle Bitflips von $0$ auf $1$, dass
+            \begin{align*}
+                \Phi(D_i) = \Phi(D_{i-1}) + o - m.
+            \end{align*}
+            Damit ergibt sich für 
+            \begin{align*}
+                \Phi(D_i) - \Phi(D_{i-1}) = \Phi(D_{i-1}) + o - m - \Phi(D_{i-1}) = o - m.
+            \end{align*} Dann folgt für $\hat{c_i}$, dass 
+            \begin{align*}
+                \hat{c_i}=n +o - m=  o + m + o - m = 2 o \leq 2.
+            \end{align*} Dies gilt, da im Maximalfall, wenn alle $1$ auf $0$ flippen, nach Teilaufgabe eins maximal ein Bit auf $1$ flippt, womit $o \leq 1$ gilt und die Voraussetzung erfüllt ist. 
+            \item Mit Teil b gilt, dass für ein beliebiges n die ersten n Iterationen des Verfahrens mit Startstring $000...000$ eine obere Schranke an Bitflips benötigen. Allgemein gilt für jede Iteration, dass die Anzahl der Bitflips maximal $n$ sein kann. Da mit Teil zwei für jede Iteration $\hat{c_i}= c_i + \Phi(D_i) - \Phi(D_{i+1}) \leq 2$ mit $c_i$ als Anzahl der Bitflips gilt, folgt, dass die Summe aller Iterationen gegeben ist mit 
+            \begin{align*}
+                \sum_{i=1}^n \hat{c_i} = \sum_{i=1}^n c_i + \Phi(D_i) - \Phi(D_{i+1}) \leq \sum_{i=1}^n 2.
+            \end{align*}
+            Weiter ist $\sum_{i=1}^n \Phi(D_i) - \Phi(D_{i-1})$ eine Teleskopsumme und mit dem zweiten Teil ist $\Phi(D_0)=0$, sodass gilt:
+            \begin{align*}
+                \sum_{i=1}^n \Phi(D_i) - \Phi(D_{i+1}) = \Phi(D_n) - \Phi(D_0) = \Phi (D_n).
+            \end{align*} Damit ergibt sich mit $\Phi(D_i)\geq 0$ und $\hat{c_i}< 2$:
+            \begin{align*}
+                \sum_{i=1}^n \hat{c_i} = \sum_{i=1}^n c_i + \Phi(D_i) - \Phi(D_{i+1}) = \sum_{i=1}^n c_i + \Phi(D_n) \leq 2n
+            \end{align*} und somit, dass 
+            \begin{align*}
+                \sum_{i=1}^n c_i \leq 2n
+            \end{align*} gilt. Damit ist die Anzahl der Bitflips der ersten $n$ Iterationen auf $2n$ beschränkt. Es gilt bei $n$ Iterationen mit der oberen Schranke aus dem zweiten Teil, dass 
+            \begin{align*}
+                \sum_{i=1}^n c_i \leq \sum_{i=1}^n \hat{c_i} \leq 2n. 
+            \end{align*}
+        \end{enumerate}
+    \end{aufgabe}
+\end{document}

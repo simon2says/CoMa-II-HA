@@ -1,0 +1,19 @@
+\documentclass{standalone}
+
+\usepackage{xskak}
+
+\setchessboard{showmover=false}
+\begin{document}
+    \newgame
+    \chessboard[setfen={6k1/p7/p3PP2/8/8/7K/1B6/8 w − − 0 20}, 
+    color=orange,
+    markstyle=border,
+    markfield=f4,
+    color=red,
+    markstyle=circle,
+    markfield=f5,
+    markstyle=cross,
+    color=blue,
+    markfield=f6]
+    % FEN-Notation: Zeilen von oben nach unten. Schwarze Figuren sind kleingeschrieben, weiße Figuren groß. Leere Spaces werden mit Zahlen beschrieben. Hier bedeutet 6k1, dass zuerst 6 leere Spaces, dann ein schwarzer König, dann ein leerer Space kommen, all das in der obersten Reihe. Die Reihe darunter p7 - ein schwarzer Bauer, dann sieben leere Spaces. k - König, q - Dame, r - Turm, b - Läufer, n - Springer, p - Bauer. Nachdem alle 8 Zeilen gemacht sind, kommt, welche Farbe am Zug ist (w/b) danach ein bisschen nutzloser Quatsch. :)
+\end{document}
